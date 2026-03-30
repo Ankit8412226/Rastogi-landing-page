@@ -1,0 +1,260 @@
+@import "tailwindcss";
+
+:root {
+  /* Ultra-Premium Emerald & Gold Palette */
+  --bg-primary: #f8faf9;
+  --bg-secondary: #f0f4f2;
+  --bg-dark: #04241b;
+  --bg-charcoal: #0e1211;
+
+  --text-primary: #064e3b;
+  --text-secondary: #334155;
+  --text-light: #f8faf9;
+  --text-muted: #94a3b8;
+
+  --accent-gold: #d4af37;
+  --accent-gold-soft: #ebd691;
+  --accent-emerald: #064e3b;
+  --accent-emerald-light: #0d6e55;
+
+  --border-light: rgba(6, 78, 59, 0.08);
+  --border-dark: rgba(255, 255, 255, 0.1);
+  --border-gold: rgba(212, 175, 55, 0.3);
+
+  --shadow-sm: 0 4px 20px rgba(6, 78, 59, 0.04);
+  --shadow-md: 0 12px 40px rgba(6, 78, 59, 0.08);
+  --shadow-lg: 0 24px 60px rgba(6, 78, 59, 0.12);
+  --shadow-gold: 0 8px 32px rgba(212, 175, 55, 0.25);
+
+  /* Container Padding */
+  --container-px: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --container-px: 2.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --container-px: 5rem;
+  }
+}
+
+@theme inline {
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+
+  --color-emerald: var(--accent-emerald);
+  --color-gold: var(--accent-gold);
+  --color-charcoal: var(--bg-charcoal);
+
+  --font-sans: var(--font-inter), "Inter", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: var(--font-playfair), "Playfair Display", Georgia, serif;
+}
+
+/* ──────────────────────────────────────────────
+   BASE RESETS
+─────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0.03;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: url("https://grains-app.vercel.app/noise.png");
+}
+
+/* ──────────────────────────────────────────────
+   LAYOUT UTILITIES
+─────────────────────────────────────────────── */
+.section-padding {
+  padding-block: 6rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding-block: 8rem;
+  }
+}
+
+.site-container {
+  width: 100%;
+  max-width: 1400px;
+  margin-inline: auto;
+  padding-inline: var(--container-px);
+  position: relative;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* ──────────────────────────────────────────────
+   TYPOGRAPHY
+─────────────────────────────────────────────── */
+.cinematic-heading {
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #d4af37 0%, #f3e5ab 50%, #d4af37 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ──────────────────────────────────────────────
+   BUTTONS
+─────────────────────────────────────────────── */
+.btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem 3rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  border-radius: 99px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #d4af37 0%, #bf9460 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  transition: all 0.6s;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
+}
+
+.btn-primary:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(212, 175, 55, 0.4);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--accent-gold);
+  border: 1px solid rgba(212, 175, 55, 0.5);
+}
+
+.btn-outline:hover {
+  background: var(--accent-gold);
+  color: #fff;
+  border-color: var(--accent-gold);
+  transform: translateY(-4px);
+  box-shadow: 0 15px 30px rgba(212, 175, 55, 0.2);
+}
+
+.text-input {
+  width: 100%;
+  background: transparent;
+  border-bottom: 1px solid rgba(6, 78, 59, 0.1);
+  padding: 1rem 0;
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  transition: border-color 0.4s ease;
+}
+
+.text-input:focus {
+  outline: none;
+  border-bottom-color: var(--accent-gold);
+}
+
+/* ──────────────────────────────────────────────
+   GLASSMORPHISM
+─────────────────────────────────────────────── */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-dark {
+  background: rgba(4, 36, 27, 0.8);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ──────────────────────────────────────────────
+   ANIMATIONS
+─────────────────────────────────────────────── */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  display: flex !important;
+  width: max-content;
+  animation: marquee 40s linear infinite;
+}
+
+.hover\:pause:hover {
+  animation-play-state: paused;
+}
+
+/* Hydration error badge hiding (optional, but requested by some users to clean up UI) */
+nextjs-portal {
+  display: none !important;
+}
