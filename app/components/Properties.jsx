@@ -1,6 +1,7 @@
 "use client";
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { ArrowUpRight, MapPin } from "lucide-react";
 
 const properties = [
   {
@@ -69,8 +70,8 @@ export default function Properties() {
           </motion.p>
         </div>
 
-        {/* Properties Grid - Symmetric Using Flex and Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 w-full">
+        {/* Properties Grid - Cleaner card hierarchy */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10 w-full">
           {properties.map((property, idx) => (
             <motion.div
               key={property.id}
@@ -81,33 +82,59 @@ export default function Properties() {
                 y: -15,
                 transition: { duration: 0.4, ease: "easeOut" }
               }}
-              className="group relative cursor-pointer flex flex-col w-full"
+              className="group relative flex h-full cursor-pointer flex-col overflow-hidden rounded-[2rem] border border-emerald/10 bg-white shadow-[0_20px_55px_rgba(6,78,59,0.08)]"
             >
-              {/* Image Container with Hover Zoom and Deep Shadow */}
-              <div className="relative aspect-[4/5] rounded-[32px] overflow-hidden shadow-xl mb-8 bg-[#04241b] transition-all duration-500 group-hover:shadow-[0_40px_80px_rgba(212,175,55,0.15)] group-hover:-rotate-1">
+              {/* Image Container */}
+              <div className="relative aspect-[4/5] overflow-hidden bg-[#04241b]">
                 <img
                   src={property.image}
                   alt={property.title}
                   className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                 />
                 
-                {/* Floating Tag - Glass Effect */}
-                <div className="absolute top-6 right-6 px-4 py-2 bg-white/10 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest rounded-full border border-white/20 shadow-lg">
+                <div className="absolute inset-0 bg-gradient-to-t from-[#04241b]/82 via-[#04241b]/20 to-transparent" />
+
+                <div className="absolute left-5 top-5 px-4 py-2 bg-white/10 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-widest rounded-full border border-white/20 shadow-lg">
                   {property.tag}
                 </div>
 
-                {/* Visual Overlay Shimmer */}
-                <div className="absolute inset-0 bg-gradient-to-t from-emerald/90 via-emerald/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5">
+                  <div>
+                    <p className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.24em] text-white/65">
+                      <MapPin className="h-3.5 w-3.5 text-gold" />
+                      {property.location}
+                    </p>
+                    <h3 className="max-w-[15ch] text-2xl font-bold leading-tight text-white">
+                      {property.title}
+                    </h3>
+                  </div>
+                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/15 bg-white/10 backdrop-blur-sm transition-all duration-300 group-hover:bg-gold group-hover:border-gold">
+                    <ArrowUpRight className="h-4 w-4 text-white transition-colors duration-300 group-hover:text-[#04241b]" />
+                  </div>
+                </div>
               </div>
 
-              {/* Textual Details - Subtle Alignment Shift */}
-              <div className="flex flex-col gap-2 transition-transform duration-500 group-hover:translate-x-2">
-                <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gold">{property.location}</span>
-                <h3 className="text-3xl font-bold text-emerald transition-colors group-hover:text-gold">{property.title}</h3>
-                <p className="text-sm font-semibold text-slate-400 mt-2">{property.price}</p>
-                <div className="mt-8 flex items-center gap-4 text-emerald font-bold text-xs uppercase tracking-widest border-b border-emerald/10 pb-2 w-max transition-all group-hover:gap-6 group-hover:border-gold">
-                  Explore Heritage
-                  <span className="text-gold text-lg transition-transform group-hover:translate-x-3">→</span>
+              {/* Card Details */}
+              <div className="flex flex-1 flex-col gap-6 p-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.24em] text-emerald/45">
+                      Starting from
+                    </p>
+                    <p className="text-2xl font-bold text-emerald">{property.price}</p>
+                  </div>
+                  <div className="rounded-full border border-gold/20 bg-gold/8 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-gold">
+                    Featured
+                  </div>
+                </div>
+
+                <div className="mt-auto flex items-center justify-between border-t border-emerald/10 pt-4">
+                  <span className="text-xs font-bold uppercase tracking-[0.22em] text-emerald">
+                    Explore Property
+                  </span>
+                  <span className="text-sm font-semibold text-slate-400 transition-colors duration-300 group-hover:text-gold">
+                    Private tour
+                  </span>
                 </div>
               </div>
             </motion.div>

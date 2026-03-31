@@ -57,7 +57,7 @@ export default function Hero() {
         >
           <div className="h-px w-10 bg-gold shrink-0" />
           <span className="text-[10px] font-extrabold uppercase tracking-[0.5em] text-gold">
-            NCR's Definitive Luxury Advisory
+            NCR&apos;s Definitive Luxury Advisory
           </span>
         </motion.div>
 
@@ -99,18 +99,18 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7, duration: 0.9 }}
-          className="w-full max-w-2xl mb-12"
+          className="w-full max-w-3xl mb-12"
         >
           {/* Category Tabs */}
-          <div className="flex gap-2 mb-4">
+          <div className="flex flex-wrap gap-2.5 mb-4">
             {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
                 className={`px-5 py-2.5 rounded-full text-[10px] font-extrabold uppercase tracking-[0.2em] transition-all duration-300 ${
                   activeCategory === cat
-                    ? "bg-gold text-white"
-                    : "bg-white/5 text-white/40 border border-white/10 hover:bg-white/10 hover:text-white/70"
+                    ? "bg-gold text-[#04241b] shadow-[0_10px_30px_rgba(212,175,55,0.28)]"
+                    : "bg-white/[0.06] text-white/55 border border-white/10 hover:bg-white/10 hover:text-white/80"
                 }`}
               >
                 {cat}
@@ -120,31 +120,44 @@ export default function Hero() {
 
           {/* Search Bar */}
           <div
-            className="flex flex-col md:flex-row items-stretch md:items-center backdrop-blur-2xl border border-white/10 rounded-[2rem] md:rounded-full bg-[#04241b]/40 shadow-2xl p-2 gap-2"
+            className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3 rounded-[2rem] border border-white/12 bg-[#031a13]/70 p-3 shadow-[0_30px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl"
           >
-            {/* Input */}
-            <div className="flex items-center gap-4 flex-1 px-6 py-4 md:py-3 min-w-0 bg-white/5 rounded-full md:rounded-none md:bg-transparent border border-white/5 md:border-none">
-              <Search className="w-[18px] h-[18px] text-gold shrink-0" />
-              <input
-                type="text"
-                placeholder={`Search premium ${activeCategory.toLowerCase()}...`}
-                className="bg-transparent border-none text-white text-sm font-medium w-full focus:outline-none placeholder:text-white/30 tracking-wide min-w-0"
-              />
-            </div>
+            <div className="flex flex-1 flex-col md:flex-row rounded-[1.5rem] border border-white/8 bg-white/[0.04] overflow-hidden min-w-0">
+              <div className="flex items-center gap-4 flex-1 px-5 py-4 min-w-0">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gold/12 border border-gold/20">
+                  <Search className="w-[18px] h-[18px] text-gold shrink-0" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/35 mb-1">
+                    Search inventory
+                  </p>
+                  <input
+                    type="text"
+                    placeholder={`Search premium ${activeCategory.toLowerCase()}...`}
+                    className="bg-transparent border-none text-white text-sm md:text-[15px] font-medium w-full focus:outline-none placeholder:text-white/30 tracking-[0.02em] min-w-0"
+                  />
+                </div>
+              </div>
 
-            {/* Divider */}
-            <div className="hidden md:block w-px h-8 bg-white/10 shrink-0 mx-2" />
+              <div className="h-px md:h-auto md:w-px bg-white/8 mx-5 md:mx-0" />
 
-            {/* Location */}
-            <div className="flex items-center gap-3 px-6 py-4 md:py-3 cursor-pointer group shrink-0 bg-white/5 rounded-full md:rounded-none md:bg-transparent border border-white/5 md:border-none hover:bg-white/10 transition-colors duration-300">
-              <MapPin className="w-4 h-4 text-gold shrink-0" />
-              <span className="text-[10px] font-bold uppercase tracking-widest whitespace-nowrap text-white/50 group-hover:text-white/80 transition-colors">
-                Greater Noida
-              </span>
+              <div className="flex items-center gap-3 px-5 py-4 md:min-w-[220px]">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/[0.06] border border-white/10">
+                  <MapPin className="w-4 h-4 text-gold shrink-0" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/35 mb-1">
+                    Location
+                  </p>
+                  <span className="block text-sm font-medium text-white/80 whitespace-nowrap">
+                    Greater Noida
+                  </span>
+                </div>
+              </div>
             </div>
 
             {/* Find Button */}
-            <button className="flex items-center justify-center gap-2 px-8 py-5 md:py-4 bg-gold hover:brightness-110 active:scale-95 text-[#04241b] font-extrabold text-[10px] uppercase tracking-[0.25em] transition-all duration-300 whitespace-nowrap shrink-0 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)]">
+            <button className="flex items-center justify-center gap-2 px-8 py-5 lg:py-4 bg-gold hover:brightness-110 active:scale-95 text-[#04241b] font-extrabold text-[10px] uppercase tracking-[0.25em] transition-all duration-300 whitespace-nowrap shrink-0 rounded-[1.35rem] lg:rounded-[1.5rem] shadow-[0_20px_40px_rgba(212,175,55,0.28)]">
               Find Property
               <ArrowUpRight className="w-4 h-4" />
             </button>
@@ -182,44 +195,51 @@ export default function Hero() {
         className="absolute bottom-16 right-8 lg:right-20 z-20 hidden lg:block"
       >
         <div
-          className="relative p-6 bg-[#04241b]/60 backdrop-blur-2xl border border-white/10 rounded-3xl group cursor-pointer hover:border-gold/40 transition-all duration-500 shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
-          style={{ width: "350px" }}
+          className="relative w-[360px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#031a13]/72 p-6 backdrop-blur-2xl shadow-[0_30px_60px_rgba(0,0,0,0.45)] group cursor-pointer transition-all duration-500 hover:-translate-y-1 hover:border-gold/35"
         >
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gold/10 rounded-full blur-[40px] pointer-events-none group-hover:bg-gold/20 transition-all" />
+          <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-gold/10 to-transparent pointer-events-none" />
+          <div className="absolute -right-10 top-6 h-28 w-28 rounded-full bg-gold/10 blur-[48px] pointer-events-none group-hover:bg-gold/20 transition-all" />
 
-          <div className="flex items-start justify-between gap-4 mb-6 relative z-10">
+          <div className="relative z-10 mb-6 flex items-start justify-between gap-4">
             <div>
-              <div className="flex items-center gap-2 mb-3">
-                 <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
-                 <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-gold">Featured Project</span>
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/10 px-3 py-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+                <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-gold">Featured Project</span>
               </div>
-              <h3 className="text-white font-black text-2xl leading-tight mb-2">
+              <h3 className="text-white font-black text-[1.75rem] leading-[1.05] mb-2">
                 The Legacy Estate
               </h3>
-              <p className="text-white/50 text-xs font-medium flex items-center gap-1.5">
-                 <MapPin className="w-3.5 h-3.5 text-white/30" /> Sector 150, Greater Noida
+              <p className="text-white/55 text-xs font-medium flex items-center gap-1.5">
+                <MapPin className="w-3.5 h-3.5 text-gold/80" /> Sector 150, Greater Noida
               </p>
             </div>
-            <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-full flex items-center justify-center shrink-0 group-hover:bg-gold group-hover:border-gold transition-all duration-500 shadow-lg mt-1">
-              <ArrowUpRight className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
+            <div className="mt-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06] transition-all duration-500 group-hover:bg-gold group-hover:border-gold">
+              <ArrowUpRight className="w-4 h-4 text-white transition-transform group-hover:scale-110 group-hover:text-[#04241b]" />
             </div>
           </div>
 
-          <div className="flex bg-black/40 rounded-2xl p-4 border border-white/5 gap-4 relative z-10 justify-between items-center shadow-inner">
-            <div className="flex flex-col gap-1">
-               <span className="text-white text-sm font-bold">3–5 BHK</span>
-               <span className="text-white/30 text-[9px] uppercase tracking-widest">Config</span>
+          <div className="relative z-10 mb-5 grid grid-cols-3 gap-3">
+            <div className="rounded-2xl border border-white/8 bg-black/20 px-4 py-4">
+              <span className="block text-white text-sm font-bold mb-1">3-5 BHK</span>
+              <span className="text-white/30 text-[9px] uppercase tracking-widest">Config</span>
             </div>
-            <div className="w-px h-8 bg-white/10" />
-            <div className="flex flex-col gap-1 flex-1 items-center">
-               <span className="text-white text-sm font-bold">₹2.8Cr+</span>
-               <span className="text-white/30 text-[9px] uppercase tracking-widest">Starting</span>
+            <div className="rounded-2xl border border-white/8 bg-black/20 px-4 py-4 text-center">
+              <span className="block text-white text-sm font-bold mb-1">₹2.8Cr+</span>
+              <span className="text-white/30 text-[9px] uppercase tracking-widest">Starting</span>
             </div>
-            <div className="w-px h-8 bg-white/10" />
-            <div className="flex flex-col gap-1 text-right">
-               <span className="text-white text-sm font-bold">Q4 2025</span>
-               <span className="text-white/30 text-[9px] uppercase tracking-widest">Possession</span>
+            <div className="rounded-2xl border border-white/8 bg-black/20 px-4 py-4 text-right">
+              <span className="block text-white text-sm font-bold mb-1">Q4 2025</span>
+              <span className="text-white/30 text-[9px] uppercase tracking-widest">Possession</span>
             </div>
+          </div>
+
+          <div className="relative z-10 flex items-center justify-between border-t border-white/8 pt-4">
+            <p className="text-[11px] uppercase tracking-[0.24em] text-white/38">
+              Private previews open now
+            </p>
+            <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-gold">
+              View details
+            </span>
           </div>
         </div>
       </motion.div>
