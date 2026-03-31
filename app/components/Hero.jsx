@@ -120,11 +120,10 @@ export default function Hero() {
 
           {/* Search Bar */}
           <div
-            className="flex items-stretch backdrop-blur-xl border border-white/15 rounded-2xl overflow-hidden"
-            style={{ background: "rgba(255,255,255,0.07)" }}
+            className="flex flex-col md:flex-row items-stretch md:items-center backdrop-blur-2xl border border-white/10 rounded-[2rem] md:rounded-full bg-[#04241b]/40 shadow-2xl p-2 gap-2"
           >
             {/* Input */}
-            <div className="flex items-center gap-4 flex-1 px-6 py-5 min-w-0">
+            <div className="flex items-center gap-4 flex-1 px-6 py-4 md:py-3 min-w-0 bg-white/5 rounded-full md:rounded-none md:bg-transparent border border-white/5 md:border-none">
               <Search className="w-[18px] h-[18px] text-gold shrink-0" />
               <input
                 type="text"
@@ -134,23 +133,20 @@ export default function Hero() {
             </div>
 
             {/* Divider */}
-            <div className="w-px my-4 bg-white/10 shrink-0" />
+            <div className="hidden md:block w-px h-8 bg-white/10 shrink-0 mx-2" />
 
             {/* Location */}
-            <div className="flex items-center gap-2.5 px-5 py-5 cursor-pointer group shrink-0">
+            <div className="flex items-center gap-3 px-6 py-4 md:py-3 cursor-pointer group shrink-0 bg-white/5 rounded-full md:rounded-none md:bg-transparent border border-white/5 md:border-none hover:bg-white/10 transition-colors duration-300">
               <MapPin className="w-4 h-4 text-gold shrink-0" />
               <span className="text-[10px] font-bold uppercase tracking-widest whitespace-nowrap text-white/50 group-hover:text-white/80 transition-colors">
                 Greater Noida
               </span>
             </div>
 
-            {/* Divider */}
-            <div className="w-px my-4 bg-white/10 shrink-0" />
-
             {/* Find Button */}
-            <button className="flex items-center gap-2 px-8 py-5 bg-gold hover:brightness-110 active:scale-95 text-white font-extrabold text-[10px] uppercase tracking-[0.25em] transition-all duration-300 whitespace-nowrap shrink-0">
-              Find
-              <ArrowUpRight className="w-3.5 h-3.5" />
+            <button className="flex items-center justify-center gap-2 px-8 py-5 md:py-4 bg-gold hover:brightness-110 active:scale-95 text-[#04241b] font-extrabold text-[10px] uppercase tracking-[0.25em] transition-all duration-300 whitespace-nowrap shrink-0 rounded-full shadow-[0_0_20px_rgba(212,175,55,0.4)]">
+              Find Property
+              <ArrowUpRight className="w-4 h-4" />
             </button>
           </div>
         </motion.div>
@@ -186,31 +182,44 @@ export default function Hero() {
         className="absolute bottom-16 right-8 lg:right-20 z-20 hidden lg:block"
       >
         <div
-          className="p-6 bg-black/50 backdrop-blur-2xl border border-white/10 rounded-3xl group cursor-pointer hover:border-gold/30 transition-all duration-500"
-          style={{ width: "300px" }}
+          className="relative p-6 bg-[#04241b]/60 backdrop-blur-2xl border border-white/10 rounded-3xl group cursor-pointer hover:border-gold/40 transition-all duration-500 shadow-[0_30px_60px_rgba(0,0,0,0.5)]"
+          style={{ width: "350px" }}
         >
-          <div className="flex items-start justify-between gap-4 mb-5">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gold/10 rounded-full blur-[40px] pointer-events-none group-hover:bg-gold/20 transition-all" />
+
+          <div className="flex items-start justify-between gap-4 mb-6 relative z-10">
             <div>
-              <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-gold block mb-2">
-                Featured Project
-              </span>
-              <h3 className="text-white font-black text-xl leading-tight">
+              <div className="flex items-center gap-2 mb-3">
+                 <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+                 <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-gold">Featured Project</span>
+              </div>
+              <h3 className="text-white font-black text-2xl leading-tight mb-2">
                 The Legacy Estate
               </h3>
-              <p className="text-white/40 text-xs mt-1.5 font-medium">Sector 150, Greater Noida</p>
+              <p className="text-white/50 text-xs font-medium flex items-center gap-1.5">
+                 <MapPin className="w-3.5 h-3.5 text-white/30" /> Sector 150, Greater Noida
+              </p>
             </div>
-            <div className="w-11 h-11 bg-gold rounded-full flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-500">
-              <ArrowUpRight className="w-4 h-4 text-white" />
+            <div className="w-12 h-12 bg-white/5 border border-white/10 rounded-full flex items-center justify-center shrink-0 group-hover:bg-gold group-hover:border-gold transition-all duration-500 shadow-lg mt-1">
+              <ArrowUpRight className="w-4 h-4 text-white group-hover:scale-110 transition-transform" />
             </div>
           </div>
 
-          <div className="flex items-center gap-6 pt-4 border-t border-white/10">
-            {[["3–5 BHK", "Config"], ["₹2.8Cr+", "Starting"], ["Q4 2025", "Possession"]].map(([val, lbl]) => (
-              <div key={lbl} className="flex flex-col gap-0.5">
-                <span className="text-white text-xs font-bold">{val}</span>
-                <span className="text-white/30 text-[9px] uppercase tracking-widest">{lbl}</span>
-              </div>
-            ))}
+          <div className="flex bg-black/40 rounded-2xl p-4 border border-white/5 gap-4 relative z-10 justify-between items-center shadow-inner">
+            <div className="flex flex-col gap-1">
+               <span className="text-white text-sm font-bold">3–5 BHK</span>
+               <span className="text-white/30 text-[9px] uppercase tracking-widest">Config</span>
+            </div>
+            <div className="w-px h-8 bg-white/10" />
+            <div className="flex flex-col gap-1 flex-1 items-center">
+               <span className="text-white text-sm font-bold">₹2.8Cr+</span>
+               <span className="text-white/30 text-[9px] uppercase tracking-widest">Starting</span>
+            </div>
+            <div className="w-px h-8 bg-white/10" />
+            <div className="flex flex-col gap-1 text-right">
+               <span className="text-white text-sm font-bold">Q4 2025</span>
+               <span className="text-white/30 text-[9px] uppercase tracking-widest">Possession</span>
+            </div>
           </div>
         </div>
       </motion.div>
