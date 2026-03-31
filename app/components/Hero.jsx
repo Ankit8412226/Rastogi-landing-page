@@ -1,262 +1,454 @@
-"use client";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowUpRight, ChevronDown, MapPin, Search } from "lucide-react";
+import { ArrowUpRight, ChevronDown, MapPin, Search, ShieldCheck } from "lucide-react";
 import { useRef, useState } from "react";
 
 const stats = [
-  { label: "Years of Trust", value: "18+" },
-  { label: "Happy Families", value: "2,400+" },
-  { label: "Projects Done", value: "340+" },
-  { label: "Satisfaction", value: "96%" },
+  { label: "Years of Trust",  value: "18+"    },
+  { label: "Happy Families",  value: "2,400+" },
+  { label: "Projects Done",   value: "340+"   },
+  { label: "Satisfaction",    value: "96%"    },
 ];
 
 const categories = ["Residential", "Commercial", "Plots"];
 
 export default function Hero() {
-  const containerRef = useRef(null);
+  const ref = useRef(null);
   const { scrollY } = useScroll();
-  const yBg = useTransform(scrollY, [0, 600], [0, 180]);
-  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
-  const [activeCategory, setActiveCategory] = useState("Residential");
+  const yBg      = useTransform(scrollY, [0, 600], [0, 160]);
+  const opScroll = useTransform(scrollY, [0, 300], [1, 0]);
+  const [active, setActive] = useState("Residential");
 
   return (
     <section
-      ref={containerRef}
-      className="relative min-h-screen w-full overflow-hidden bg-[#050f0a]"
+      ref={ref}
+      style={{
+        position: "relative",
+        width: "100%",
+        minHeight: "100vh",
+        overflow: "hidden",
+        background: "#050f0a",
+        display: "flex",
+        flexDirection: "column",
+      }}
     >
-      {/* Background */}
-      <motion.div style={{ y: yBg }} className="absolute inset-0 -top-20 -bottom-20 z-0">
+      {/* ── BG ── */}
+      <motion.div
+        style={{
+          y: yBg,
+          position: "absolute",
+          inset: 0,
+          top: "-5rem",
+          bottom: "-5rem",
+          zIndex: 0,
+          pointerEvents: "none",
+        }}
+      >
         <img
           src="/images/hero.png"
           alt=""
-          className="w-full h-full object-cover object-center scale-110"
+          style={{ width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.1)" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#04241b]/95 via-[#04241b]/75 to-[#04241b]/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#04241b] via-transparent to-[#04241b]/40" />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right,rgba(4,36,27,0.96) 0%,rgba(4,36,27,0.78) 55%,rgba(4,36,27,0.42) 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top,rgba(4,36,27,1) 0%,transparent 40%,rgba(4,36,27,0.28) 100%)" }} />
       </motion.div>
 
-      {/* Vertical grid lines */}
-      <div className="absolute inset-0 z-[1] pointer-events-none">
-        {[20, 40, 60, 80].map((pct) => (
-          <div key={pct} className="absolute top-0 bottom-0 w-px bg-white/[0.03]" style={{ left: `${pct}%` }} />
+      {/* grid lines */}
+      <div style={{ position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none" }}>
+        {[20, 40, 60, 80].map((p) => (
+          <div key={p} style={{ position: "absolute", top: 0, bottom: 0, left: `${p}%`, width: 1, background: "rgba(255,255,255,0.025)" }} />
         ))}
       </div>
 
-      {/* Gold orb */}
-      <div className="absolute top-1/3 right-[15%] w-[500px] h-[500px] rounded-full bg-gold/5 blur-[120px] pointer-events-none z-[1]" />
+      {/* gold orb */}
+      <div style={{ position: "absolute", top: "30%", right: "10%", width: 480, height: 480, borderRadius: "50%", background: "rgba(201,168,76,0.055)", filter: "blur(110px)", pointerEvents: "none", zIndex: 1 }} />
 
-      {/* ── MAIN CONTENT ── */}
-      <div className="relative z-10 site-container min-h-screen flex flex-col justify-center pt-36 pb-16">
+      {/* ══════════════════════════════════════════
+          MAIN GRID — fills full height
+      ══════════════════════════════════════════ */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 10,
+          flex: 1,
+          display: "grid",
+          gridTemplateColumns: "1fr auto",
+          gridTemplateRows: "1fr auto",
+          columnGap: "3rem",
+          alignItems: "center",
+          maxWidth: 1400,
+          width: "100%",
+          margin: "0 auto",
+          padding: "0 5rem",
+          paddingTop: "7rem",   /* below navbar */
+          paddingBottom: "5rem",
+          boxSizing: "border-box",
+        }}
+        className="hero-grid"
+      >
 
-        {/* Eyebrow */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="flex items-center gap-4 mb-8"
-        >
-          <div className="h-px w-10 bg-gold shrink-0" />
-          <span className="text-[10px] font-extrabold uppercase tracking-[0.5em] text-gold">
-            NCR&apos;s Definitive Luxury Advisory
-          </span>
-        </motion.div>
+        {/* ══ LEFT: copy + search + stats ══ */}
+        <div style={{ gridColumn: 1, gridRow: "1 / 3", display: "flex", flexDirection: "column", justifyContent: "center" }}>
 
-        {/* Headline */}
-        <div className="mb-8 overflow-hidden">
-          <motion.h1
-            initial={{ y: "100%", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-            className="text-[clamp(3rem,8vw,7rem)] font-black text-white leading-[0.88] tracking-[-0.03em] uppercase"
+          {/* eyebrow */}
+          <motion.div
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}
           >
-            Where
-            <br />
-            <em
-              className="not-italic text-transparent bg-clip-text block"
+            <div style={{ width: 32, height: 1.5, background: "#c9a84c", flexShrink: 0 }} />
+            <span style={{ fontSize: 9, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.48em", color: "#c9a84c" }}>
+              NCR&apos;s Definitive Luxury Advisory
+            </span>
+          </motion.div>
+
+          {/* headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 28 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.0, ease: [0.16, 1, 0.3, 1], delay: 0.18 }}
+            style={{
+              fontWeight: 900,
+              textTransform: "uppercase",
+              lineHeight: 0.88,
+              letterSpacing: "-0.03em",
+              marginBottom: 20,
+              fontSize: "clamp(2.8rem, 7.5vw, 6.8rem)",
+            }}
+          >
+            <span style={{ color: "#fff", display: "block" }}>Where</span>
+            <span
               style={{
-                backgroundImage: "linear-gradient(135deg, #c9a84c 0%, #f5d78e 50%, #c9a84c 100%)",
+                display: "block",
+                backgroundImage: "linear-gradient(135deg,#c9a84c 0%,#f5d78e 50%,#c9a84c 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
               }}
             >
               Legacy
-            </em>
-            <span className="text-white/90">Meets Land.</span>
-          </motion.h1>
-        </div>
-
-        {/* Subheading */}
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.55, duration: 0.9 }}
-          className="text-white/50 text-base max-w-sm mb-10 leading-relaxed font-light tracking-wide"
-        >
-          Strategic advisory for high-yield commercial assets and elite
-          residential estates in Greater Noida & NCR.
-        </motion.p>
-
-        {/* ── Search Hub ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7, duration: 0.9 }}
-          className="w-full max-w-3xl mb-12"
-        >
-          {/* Category Tabs */}
-          <div className="flex flex-wrap gap-2.5 mb-4">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-5 py-2.5 rounded-full text-[10px] font-extrabold uppercase tracking-[0.2em] transition-all duration-300 ${
-                  activeCategory === cat
-                    ? "bg-gold text-[#04241b] shadow-[0_10px_30px_rgba(212,175,55,0.28)]"
-                    : "bg-white/[0.06] text-white/55 border border-white/10 hover:bg-white/10 hover:text-white/80"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-
-          {/* Search Bar */}
-          <div
-            className="flex flex-col lg:flex-row items-stretch lg:items-center gap-3 rounded-[2rem] border border-white/12 bg-[#031a13]/70 p-3 shadow-[0_30px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl"
-          >
-            <div className="flex flex-1 flex-col md:flex-row rounded-[1.5rem] border border-white/8 bg-white/[0.04] overflow-hidden min-w-0">
-              <div className="flex items-center gap-4 flex-1 px-5 py-4 min-w-0">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gold/12 border border-gold/20">
-                  <Search className="w-[18px] h-[18px] text-gold shrink-0" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/35 mb-1">
-                    Search inventory
-                  </p>
-                  <input
-                    type="text"
-                    placeholder={`Search premium ${activeCategory.toLowerCase()}...`}
-                    className="bg-transparent border-none text-white text-sm md:text-[15px] font-medium w-full focus:outline-none placeholder:text-white/30 tracking-[0.02em] min-w-0"
-                  />
-                </div>
-              </div>
-
-              <div className="h-px md:h-auto md:w-px bg-white/8 mx-5 md:mx-0" />
-
-              <div className="flex items-center gap-3 px-5 py-4 md:min-w-[220px]">
-                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-white/[0.06] border border-white/10">
-                  <MapPin className="w-4 h-4 text-gold shrink-0" />
-                </div>
-                <div className="min-w-0">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/35 mb-1">
-                    Location
-                  </p>
-                  <span className="block text-sm font-medium text-white/80 whitespace-nowrap">
-                    Greater Noida
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Find Button */}
-            <button className="flex items-center justify-center gap-2 px-8 py-5 lg:py-4 bg-gold hover:brightness-110 active:scale-95 text-[#04241b] font-extrabold text-[10px] uppercase tracking-[0.25em] transition-all duration-300 whitespace-nowrap shrink-0 rounded-[1.35rem] lg:rounded-[1.5rem] shadow-[0_20px_40px_rgba(212,175,55,0.28)]">
-              Find Property
-              <ArrowUpRight className="w-4 h-4" />
-            </button>
-          </div>
-        </motion.div>
-
-        {/* ── Stats ── */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.95, duration: 1 }}
-          className="flex items-center"
-        >
-          {stats.map((stat, i) => (
-            <div
-              key={i}
-              className={`flex flex-col pr-10 ${i !== 0 ? "pl-10 border-l border-white/10" : ""}`}
-            >
-              <span className="text-2xl md:text-3xl font-black text-white leading-none mb-1.5">
-                {stat.value}
-              </span>
-              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-white/35 whitespace-nowrap">
-                {stat.label}
-              </span>
-            </div>
-          ))}
-        </motion.div>
-      </div>
-
-      {/* ── Featured Card ── */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.1, duration: 0.9 }}
-        className="absolute bottom-16 right-8 lg:right-20 z-20 hidden lg:block"
-      >
-        <div
-          className="relative w-[360px] overflow-hidden rounded-[2rem] border border-white/10 bg-[#031a13]/72 p-6 backdrop-blur-2xl shadow-[0_30px_60px_rgba(0,0,0,0.45)] group cursor-pointer transition-all duration-500 hover:-translate-y-1 hover:border-gold/35"
-        >
-          <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-gold/10 to-transparent pointer-events-none" />
-          <div className="absolute -right-10 top-6 h-28 w-28 rounded-full bg-gold/10 blur-[48px] pointer-events-none group-hover:bg-gold/20 transition-all" />
-
-          <div className="relative z-10 mb-6 flex items-start justify-between gap-4">
-            <div>
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/10 px-3 py-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
-                <span className="text-[9px] font-bold uppercase tracking-[0.25em] text-gold">Featured Project</span>
-              </div>
-              <h3 className="text-white font-black text-[1.75rem] leading-[1.05] mb-2">
-                The Legacy Estate
-              </h3>
-              <p className="text-white/55 text-xs font-medium flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-gold/80" /> Sector 150, Greater Noida
-              </p>
-            </div>
-            <div className="mt-1 flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.06] transition-all duration-500 group-hover:bg-gold group-hover:border-gold">
-              <ArrowUpRight className="w-4 h-4 text-white transition-transform group-hover:scale-110 group-hover:text-[#04241b]" />
-            </div>
-          </div>
-
-          <div className="relative z-10 mb-5 grid grid-cols-3 gap-3">
-            <div className="rounded-2xl border border-white/8 bg-black/20 px-4 py-4">
-              <span className="block text-white text-sm font-bold mb-1">3-5 BHK</span>
-              <span className="text-white/30 text-[9px] uppercase tracking-widest">Config</span>
-            </div>
-            <div className="rounded-2xl border border-white/8 bg-black/20 px-4 py-4 text-center">
-              <span className="block text-white text-sm font-bold mb-1">₹2.8Cr+</span>
-              <span className="text-white/30 text-[9px] uppercase tracking-widest">Starting</span>
-            </div>
-            <div className="rounded-2xl border border-white/8 bg-black/20 px-4 py-4 text-right">
-              <span className="block text-white text-sm font-bold mb-1">Q4 2025</span>
-              <span className="text-white/30 text-[9px] uppercase tracking-widest">Possession</span>
-            </div>
-          </div>
-
-          <div className="relative z-10 flex items-center justify-between border-t border-white/8 pt-4">
-            <p className="text-[11px] uppercase tracking-[0.24em] text-white/38">
-              Private previews open now
-            </p>
-            <span className="text-[11px] font-bold uppercase tracking-[0.24em] text-gold">
-              View details
             </span>
-          </div>
-        </div>
-      </motion.div>
+            <span style={{ color: "rgba(255,255,255,0.92)", display: "block" }}>Meets Land.</span>
+          </motion.h1>
 
-      {/* ── Scroll Indicator ── */}
-      <motion.div
-        style={{ opacity }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2 pointer-events-none"
-      >
-        <span className="text-[9px] font-bold uppercase tracking-[0.4em] text-white/25">Scroll</span>
+          {/* sub */}
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.48, duration: 0.8 }}
+            style={{
+              color: "rgba(255,255,255,0.48)",
+              fontSize: 13.5,
+              lineHeight: 1.7,
+              fontWeight: 300,
+              letterSpacing: "0.02em",
+              maxWidth: 340,
+              marginBottom: 24,
+            }}
+          >
+            Strategic advisory for high-yield commercial assets and elite
+            residential estates in Greater Noida &amp; NCR.
+          </motion.p>
+
+          {/* ── search ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.62, duration: 0.85 }}
+            style={{ maxWidth: 580, marginBottom: 32 }}
+          >
+            {/* tabs */}
+            <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActive(cat)}
+                  style={{
+                    padding: "7px 18px",
+                    borderRadius: 999,
+                    fontSize: 9.5,
+                    fontWeight: 800,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.22em",
+                    cursor: "pointer",
+                    transition: "all .3s",
+                    border: active === cat ? "none" : "1px solid rgba(255,255,255,0.13)",
+                    background: active === cat ? "#c9a84c" : "rgba(255,255,255,0.07)",
+                    color: active === cat ? "#04241b" : "rgba(255,255,255,0.58)",
+                    boxShadow: active === cat ? "0 6px 20px rgba(201,168,76,0.38)" : "none",
+                  }}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
+
+            {/* bar */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "stretch",
+                gap: 8,
+                padding: 8,
+                borderRadius: 16,
+                background: "rgba(3,26,19,0.84)",
+                border: "1px solid rgba(255,255,255,0.12)",
+                backdropFilter: "blur(24px)",
+                boxShadow: "0 20px 56px rgba(0,0,0,0.44)",
+              }}
+            >
+              {/* inner */}
+              <div
+                style={{
+                  display: "flex",
+                  flex: 1,
+                  alignItems: "stretch",
+                  borderRadius: 12,
+                  overflow: "hidden",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.09)",
+                  minWidth: 0,
+                }}
+              >
+                {/* search field */}
+                <div style={{ display: "flex", alignItems: "center", gap: 12, flex: 1, padding: "10px 16px", minWidth: 0 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(201,168,76,0.14)", border: "1px solid rgba(201,168,76,0.26)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <Search size={13} color="#c9a84c" />
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ fontSize: 7.5, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.3em", color: "rgba(255,255,255,0.45)", marginBottom: 3 }}>Search inventory</p>
+                    <input
+                      type="text"
+                      placeholder={`Search premium ${active.toLowerCase()}…`}
+                      style={{ background: "transparent", border: "none", outline: "none", fontSize: 13, fontWeight: 500, color: "rgba(255,255,255,0.88)", width: "100%" }}
+                    />
+                  </div>
+                </div>
+
+                {/* divider */}
+                <div style={{ width: 1, background: "rgba(255,255,255,0.09)", margin: "10px 0", flexShrink: 0 }} />
+
+                {/* location */}
+                <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 16px", flexShrink: 0 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.13)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <MapPin size={13} color="#c9a84c" />
+                  </div>
+                  <div>
+                    <p style={{ fontSize: 7.5, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.3em", color: "rgba(255,255,255,0.45)", marginBottom: 3 }}>Location</p>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: "rgba(255,255,255,0.86)", whiteSpace: "nowrap" }}>Greater Noida</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA */}
+              <button
+                style={{
+                  display: "flex", alignItems: "center", gap: 6,
+                  padding: "0 22px",
+                  borderRadius: 12,
+                  background: "#c9a84c",
+                  color: "#04241b",
+                  fontSize: 9, fontWeight: 800,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.22em",
+                  whiteSpace: "nowrap",
+                  flexShrink: 0,
+                  cursor: "pointer",
+                  border: "none",
+                  boxShadow: "0 10px 28px rgba(201,168,76,0.32)",
+                  transition: "all .3s",
+                }}
+              >
+                Find Property <ArrowUpRight size={13} />
+              </button>
+            </div>
+          </motion.div>
+
+          {/* ── stats ── */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.9, duration: 0.9 }}
+            style={{ display: "flex", alignItems: "center" }}
+          >
+            {stats.map((s, i) => (
+              <div
+                key={i}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  paddingRight: "2rem",
+                  paddingLeft: i !== 0 ? "2rem" : 0,
+                  borderLeft: i !== 0 ? "1px solid rgba(255,255,255,0.1)" : "none",
+                }}
+              >
+                <span style={{ fontSize: "clamp(1.2rem,2vw,1.6rem)", fontWeight: 900, color: "#fff", lineHeight: 1, marginBottom: 5 }}>
+                  {s.value}
+                </span>
+                <span style={{ fontSize: 7.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.22em", color: "rgba(255,255,255,0.32)", whiteSpace: "nowrap" }}>
+                  {s.label}
+                </span>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+
+        {/* ══ RIGHT: featured card ══ */}
         <motion.div
-          animate={{ y: [0, 6, 0] }}
+          initial={{ opacity: 0, y: 28 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.85, duration: 1.0, ease: [0.16, 1, 0.3, 1] }}
+          style={{ gridColumn: 2, gridRow: "1 / 3", alignSelf: "center" }}
+        >
+          <div
+            className="featured-card-hover"
+            style={{
+              width: 280,
+              cursor: "pointer",
+              position: "relative",
+              borderRadius: 24,
+              overflow: "hidden",
+              background: "linear-gradient(160deg,rgba(13,51,38,0.97) 0%,rgba(3,26,19,0.99) 100%)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              boxShadow: "0 40px 80px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.05)",
+              transition: "transform .5s cubic-bezier(.16,1,.3,1)",
+            }}
+            onMouseEnter={e => e.currentTarget.style.transform = "translateY(-6px)"}
+            onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}
+          >
+            {/* gold top stripe */}
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2.5, background: "linear-gradient(90deg,#c9a84c 0%,#f5d78e 50%,#c9a84c 100%)", zIndex: 2 }} />
+
+            {/* ambient radial */}
+            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 65% 40% at 85% 0%,rgba(201,168,76,0.12) 0%,transparent 70%)", pointerEvents: "none", zIndex: 1 }} />
+
+            <div style={{ padding: "22px 20px 18px", position: "relative", zIndex: 2 }}>
+
+              {/* header */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "5px 10px", borderRadius: 999, background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.2)" }}>
+                  <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#c9a84c" }} />
+                  <span style={{ fontSize: 7.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.26em", color: "#c9a84c" }}>Featured</span>
+                </div>
+                <div style={{ width: 32, height: 32, borderRadius: 10, background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.1)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <ArrowUpRight size={13} color="rgba(255,255,255,0.65)" />
+                </div>
+              </div>
+
+              {/* name */}
+              <div style={{ marginBottom: 6 }}>
+                <p style={{ fontSize: 26, fontWeight: 900, color: "#fff", lineHeight: 1, letterSpacing: "-0.03em" }}>The Legacy</p>
+                <p style={{ fontSize: 26, fontWeight: 900, lineHeight: 1, letterSpacing: "-0.03em", backgroundImage: "linear-gradient(135deg,#c9a84c 0%,#f5d78e 50%,#c9a84c 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>
+                  Estate
+                </p>
+              </div>
+
+              {/* location */}
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
+                <MapPin size={11} color="rgba(201,168,76,0.65)" style={{ flexShrink: 0 }} />
+                <span style={{ fontSize: 10, fontWeight: 500, color: "rgba(255,255,255,0.4)", letterSpacing: "0.02em" }}>Sector 150, Greater Noida</span>
+              </div>
+
+              {/* divider */}
+              <div style={{ height: 1, background: "rgba(255,255,255,0.07)", marginBottom: 14 }} />
+
+              {/* stat chips */}
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, marginBottom: 14 }}>
+                {[
+                  { v: "3–5 BHK", l: "Config",   gold: false },
+                  { v: "₹2.8Cr+", l: "Starting", gold: true  },
+                  { v: "Q4 '25",  l: "Possess",  gold: false },
+                ].map(({ v, l, gold }) => (
+                  <div
+                    key={l}
+                    style={{
+                      padding: "10px 6px",
+                      borderRadius: 10,
+                      textAlign: "center",
+                      background: gold ? "rgba(201,168,76,0.09)" : "rgba(0,0,0,0.22)",
+                      border: gold ? "1px solid rgba(201,168,76,0.24)" : "1px solid rgba(255,255,255,0.07)",
+                    }}
+                  >
+                    <span
+                      style={
+                        gold
+                          ? { display: "block", fontSize: 11, fontWeight: 700, lineHeight: 1, marginBottom: 4, backgroundImage: "linear-gradient(135deg,#c9a84c,#f5d78e)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }
+                          : { display: "block", fontSize: 11, fontWeight: 700, lineHeight: 1, marginBottom: 4, color: "#fff" }
+                      }
+                    >
+                      {v}
+                    </span>
+                    <span style={{ fontSize: 7, textTransform: "uppercase", letterSpacing: "0.12em", color: gold ? "rgba(201,168,76,0.45)" : "rgba(255,255,255,0.28)" }}>
+                      {l}
+                    </span>
+                  </div>
+                ))}
+              </div>
+
+              {/* image */}
+              <div style={{ position: "relative", borderRadius: 10, overflow: "hidden", height: 90, background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", marginBottom: 14 }}>
+                <img
+                  src="/images/legacy-estate.jpg"
+                  alt=""
+                  style={{ width: "100%", height: "100%", objectFit: "cover", opacity: 0.58, transition: "all .6s" }}
+                  onError={(e) => { e.target.style.display = "none"; }}
+                />
+                {/* fallback label */}
+                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", pointerEvents: "none" }}>
+                  <span style={{ fontSize: 7.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.2em", color: "rgba(255,255,255,0.12)" }}>Property Preview</span>
+                </div>
+                {/* RERA */}
+                <div style={{ position: "absolute", bottom: 8, left: 8, display: "flex", alignItems: "center", gap: 4, padding: "4px 8px", borderRadius: 999, background: "rgba(3,26,19,0.9)", border: "1px solid rgba(201,168,76,0.22)", backdropFilter: "blur(8px)" }}>
+                  <ShieldCheck size={9} color="#c9a84c" style={{ flexShrink: 0 }} />
+                  <span style={{ fontSize: 6.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.16em", color: "#c9a84c" }}>RERA Approved</span>
+                </div>
+              </div>
+
+              {/* footer */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 12, borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+                <span style={{ fontSize: 7.5, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.18em", color: "rgba(255,255,255,0.25)" }}>Previews open now</span>
+                <span style={{ fontSize: 7.5, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.18em", color: "#c9a84c" }}>View details</span>
+              </div>
+
+            </div>
+          </div>
+        </motion.div>
+
+      </div>
+      {/* ── end main grid ── */}
+
+      {/* scroll indicator */}
+      <motion.div
+        style={{ opacity: opScroll, position: "absolute", bottom: 28, left: "50%", transform: "translateX(-50%)", zIndex: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 6, pointerEvents: "none" }}
+      >
+        <span style={{ fontSize: 8, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.4em", color: "rgba(255,255,255,0.22)" }}>Scroll</span>
+        <motion.div
+          animate={{ y: [0, 5, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
         >
-          <ChevronDown className="w-4 h-4 text-white/25" />
+          <ChevronDown size={14} color="rgba(255,255,255,0.22)" />
         </motion.div>
       </motion.div>
+
+      {/* responsive breakpoint — stack on mobile */}
+      <style>{`
+        @media (max-width: 1023px) {
+          .hero-grid {
+            grid-template-columns: 1fr !important;
+            grid-template-rows: auto auto !important;
+            padding-left: 1.5rem !important;
+            padding-right: 1.5rem !important;
+            padding-top: 6rem !important;
+            gap: 3rem !important;
+          }
+          .hero-grid > *:first-child { grid-column: 1 !important; grid-row: 1 !important; }
+          .hero-grid > *:last-child  { grid-column: 1 !important; grid-row: 2 !important; width: 100% !important; }
+          .hero-grid > *:last-child > div { width: 100% !important; }
+        }
+        @media (max-width: 640px) {
+          .hero-grid { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+        }
+      `}</style>
     </section>
   );
 }
