@@ -7,13 +7,13 @@ export default function FullWidthCTA() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section 
-      ref={ref} 
-      className="relative section-padding bg-[#041a14] text-white overflow-hidden py-32"
+    <section
+      ref={ref}
+      className="relative section-padding bg-[#041a14] text-white overflow-hidden"
     >
       {/* Dynamic Background */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#041a14]/90 via-[#041a14]/60 to-transparent z-10" />
+        <div className="absolute inset-0 bg-linear-to-r from-[#041a14]/90 via-[#041a14]/60 to-transparent z-10" />
         <img
           src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=2000&q=80"
           alt="Premium Architecture"

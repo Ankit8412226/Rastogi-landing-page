@@ -18,7 +18,7 @@ export default function FloatingCTA() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="fixed bottom-10 right-10 z-[110] flex flex-col items-center gap-4">
+    <div className="fixed bottom-10 right-10 z-110 flex flex-col items-center gap-4">
       {/* Social Stack - Centered and Symmetric */}
       <AnimatePresence>
         {isOpen && (
@@ -48,7 +48,7 @@ export default function FloatingCTA() {
       {/* Main Hub Button - Centered and Symmetric */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-18 h-18 rounded-full shadow-2xl flex-center transition-all duration-500 transform ${
+        className={`w-16 h-16 rounded-full shadow-2xl flex-center transition-all duration-500 transform ${
           isOpen ? "bg-[#04241b] rotate-45 scale-110" : "bg-gold scale-100"
         }`}
       >

@@ -22,7 +22,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500  ${
+      className={`fixed top-0 left-0 w-full z-100 transition-all duration-500  ${
         scrolled ? "bg-[#041a14]/90 backdrop-blur-xl py-6 shadow-2xl border-b border-white/5" : "bg-transparent py-12"
       }`}
     >
@@ -48,7 +48,7 @@ export default function Navbar() {
           ))}
           <a
             href="#contact"
-            className="btn-base btn-primary !py-3 !px-8 !text-[9px]"
+            className="btn-base btn-primary py-3! px-8! text-[9px]!"
           >
             Schedule Viewing
           </a>
@@ -67,7 +67,7 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       <AnimatePresence>
-        {mobileOpen && ( mobileOpen && (
+        {mobileOpen && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
