@@ -1,6 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 const navLinks = [
   { name: "Residences", href: "#properties" },
@@ -22,11 +22,11 @@ export default function Navbar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ${
-        scrolled ? "bg-[#04241b] py-4 shadow-lg border-b border-white/5" : "bg-transparent py-8"
+      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500  ${
+        scrolled ? "bg-[#041a14]/90 backdrop-blur-xl py-6 shadow-2xl border-b border-white/5" : "bg-transparent py-12"
       }`}
     >
-      <div className="site-container flex-between">
+      <div className="site-container flex-between h-full">
         {/* Logo */}
         <div className="flex items-center gap-3 group cursor-pointer">
           <div className="w-10 h-10 flex-center bg-gold text-[#04241b] rounded-full font-serif text-xl font-bold transition-transform group-hover:scale-110">
