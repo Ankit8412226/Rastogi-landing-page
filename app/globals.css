@@ -98,12 +98,18 @@ body::after {
    LAYOUT UTILITIES
 ─────────────────────────────────────────────── */
 .section-padding {
-  padding-block: 6rem;
+  padding-block: 4rem;
 }
 
 @media (min-width: 768px) {
   .section-padding {
-    padding-block: 8rem;
+    padding-block: 5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .section-padding {
+    padding-block: 6rem;
   }
 }
 

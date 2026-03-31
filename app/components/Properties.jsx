@@ -9,7 +9,7 @@ const properties = [
     location: "Sector 18, 20 & 22",
     tag: "Investment High-Yield",
     price: "INR 2.45 Cr onwards",
-    image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/property_1.png",
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const properties = [
     location: "Noida Expressway, Sector 150",
     tag: "Residential",
     price: "INR 3.80 Cr onwards",
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/property_2.png",
   },
   {
     id: 3,
@@ -25,7 +25,7 @@ const properties = [
     location: "Advant Navis, Greater Noida West",
     tag: "Commercial",
     price: "INR 1.20 Cr onwards",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/property_3.png",
   },
 ];
 

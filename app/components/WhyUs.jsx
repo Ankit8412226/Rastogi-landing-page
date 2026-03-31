@@ -1,6 +1,6 @@
 "use client";
-import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 
 const features = [
   {
@@ -36,16 +36,16 @@ export default function WhyUs() {
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-emerald/10 rounded-full blur-[100px] pointer-events-none" />
 
       <div className="site-container relative z-10 flex flex-col items-center">
-        
+
         {/* Header Section - Symmetric and Centered */}
         <div className="flex flex-col items-center text-center gap-6 mb-20 max-w-4xl">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={inView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.6 }}
-            className="flex items-center gap-4 py-2 px-6 bg-white/5 border border-white/10 rounded-full backdrop-blur-md"
+            className="flex items-center gap-4 py-4 px-6 bg-white/5 border border-white/10 rounded-full backdrop-blur-md"
           >
-            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold">The Rastogi Advantage</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-gold ">The Rastogi Advantage</span>
           </motion.div>
 
           <motion.h2

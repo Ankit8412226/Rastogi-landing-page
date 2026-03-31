@@ -1,27 +1,26 @@
 "use client";
-import Navbar from "./components/Navbar";
-import Hero from "./components/Hero";
-import TrustBar from "./components/TrustBar";
-import Properties from "./components/Properties";
-import WhyUs from "./components/WhyUs";
 import AboutBrand from "./components/AboutBrand";
 import Amenities from "./components/Amenities";
 import Areas from "./components/Areas";
-import Testimonials from "./components/Testimonials";
+import Footer from "./components/Footer";
+import FullWidthCTA from "./components/FullWidthCTA";
+import Hero from "./components/Hero";
 import Investment from "./components/Investment";
-import Stories from "./components/Stories";
 import LeadCapture from "./components/LeadCapture";
 import LuxuryConcierge from "./components/LuxuryConcierge";
-import Footer from "./components/Footer";
-import FloatingCTA from "./components/FloatingCTA";
+import Navbar from "./components/Navbar";
+import Properties from "./components/Properties";
 import StatusTicker from "./components/StatusTicker";
-import FullWidthCTA from "./components/FullWidthCTA";
+import Stories from "./components/Stories";
+import Testimonials from "./components/Testimonials";
+import TrustBar from "./components/TrustBar";
+import WhyUs from "./components/WhyUs";
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen w-full bg-[#f8faf9]">
       <Navbar />
-      
+
       <main className="w-full flex flex-col">
         {/* 1. Hero — Full-Screen High-Impact Symmetric Reveal */}
         <Hero />
@@ -69,8 +68,7 @@ export default function Home() {
       {/* 13. Footer — Symmetric 4-Column High-Impact Navigation */}
       <Footer />
 
-      {/* 14. Support Portal — Floating Interaction Hub */}
-      <FloatingCTA />
+
 
       {/* Symmetric Overlay Effects (Subtle Visual Polish) */}
       <div className="fixed inset-0 pointer-events-none border-[32px] border-[#04241b]/[0.02] z-[999]" />
