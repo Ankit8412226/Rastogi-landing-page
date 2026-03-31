@@ -1,6 +1,6 @@
 "use client";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const navLinks = [
   { name: "Residences", href: "#properties" },
@@ -11,91 +11,241 @@ const navLinks = [
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
-    <nav
-      className={`fixed top-0 left-0 w-full z-100 transition-all duration-500  ${
-        scrolled ? "bg-[#041a14]/90 backdrop-blur-xl py-6 shadow-2xl border-b border-white/5" : "bg-transparent py-12"
-      }`}
-    >
-      <div className="site-container flex-between h-full">
-        {/* Logo */}
-        <div className="flex items-center gap-3 group cursor-pointer">
-          <div className="w-10 h-10 flex-center bg-gold text-[#04241b] rounded-full font-serif text-xl font-bold transition-transform group-hover:scale-110">
-            R
-          </div>
-          <span className="text-xl font-bold tracking-[-0.05em] text-white">RASTOGI</span>
-        </div>
+    <>
+      <style>{`
+        .nav-root {
+          position: fixed;
+          top: 0; left: 0; width: 100%;
+          z-index: 999;
+          padding: 18px 0;
+          background: rgba(4,20,15,0.88);
+          backdrop-filter: blur(20px);
+          border-bottom: 1px solid rgba(212,175,55,0.12);
+        }
 
-        {/* Desktop Links */}
-        <div className="hidden lg:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              className="text-xs uppercase font-bold tracking-[0.2em] text-white/70 hover:text-gold transition-colors"
-            >
-              {link.name}
-            </a>
-          ))}
-          <a
-            href="#contact"
-            className="btn-base btn-primary py-3! px-8! text-[9px]!"
-          >
-            Schedule Viewing
+        .nav-inner {
+          max-width: 1320px;
+          margin: 0 auto;
+          padding: 0 48px;
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
+          align-items: center;
+        }
+
+        .nav-logo {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          text-decoration: none;
+        }
+
+        .nav-logo-monogram {
+          width: 44px;
+          height: 44px;
+          border: 1px solid rgba(212,175,55,0.5);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .nav-logo-name {
+          font-size: 20px;
+          color: #f5f0e8;
+        }
+
+        .nav-links {
+          display: flex;
+          list-style: none;
+        }
+
+        .nav-links a {
+          padding: 6px 20px;
+          color: rgba(245,240,232,0.6);
+          text-decoration: none;
+        }
+
+        .nav-right {
+          display: flex;
+          justify-content: flex-end;
+          gap: 20px;
+        }
+
+        .btn-primary {
+          padding: 12px 24px;
+          background: #d4af37;
+          color: #04140f;
+          text-decoration: none;
+        }
+
+        .nav-mobile-toggle {
+          display: none;
+          flex-direction: column;
+          gap: 5px;
+          background: none;
+          border: none;
+          cursor: pointer;
+        }
+
+        .nav-mobile-toggle span {
+          height: 2px;
+          width: 25px;
+          background: white;
+        }
+
+        /* 🔥 MOBILE OVERLAY */
+        .mobile-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.4);
+          backdrop-filter: blur(6px);
+          z-index: 998;
+        }
+
+        /* 🔥 FULL SCREEN DRAWER */
+        .mobile-menu {
+          position: fixed;
+          top: 0;
+          right: 0;
+          height: 100vh;
+          width: 100%;
+          background: rgba(4,20,15,0.88);
+          backdrop-filter: blur(20px);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          padding: 40px;
+          z-index: 999;
+          position: relative;
+        }
+
+        .mobile-menu a {
+          font-size: 28px;
+          margin-bottom: 20px;
+          color: white;
+          text-decoration: none;
+        }
+
+        .mobile-menu .btn-primary {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        @media (max-width: 1024px) {
+          .nav-links { display: none; }
+          .nav-right .btn-primary { display: none; }
+          .nav-mobile-toggle { display: flex; }
+          .nav-inner { grid-template-columns: 1fr auto; }
+        }
+      `}</style>
+
+      {/* NAVBAR */}
+      <nav className="nav-root">
+        <div className="nav-inner">
+
+          {/* Logo */}
+          <a className="nav-logo" href="#">
+            <div className="nav-logo-monogram">
+              <span style={{ color: "#d4af37" }}>R</span>
+            </div>
+            <span className="nav-logo-name">RASTOGI</span>
           </a>
+
+          {/* Desktop Links */}
+          <ul className="nav-links">
+            {navLinks.map((link) => (
+              <li key={link.name}>
+                <a href={link.href}>{link.name}</a>
+              </li>
+            ))}
+          </ul>
+
+          {/* Right */}
+          <div className="nav-right">
+            <a href="#contact" className="btn-primary">
+              Schedule Viewing
+            </a>
+
+            {/* ✅ Hide when open */}
+            {!mobileOpen && (
+              <button
+                onClick={() => setMobileOpen(true)}
+                className="nav-mobile-toggle"
+                aria-label="Menu"
+              >
+                <span />
+                <span />
+                <span />
+              </button>
+            )}
+          </div>
         </div>
+      </nav>
 
-        {/* Mobile Toggle */}
-        <button
-          className="lg:hidden w-10 h-10 flex flex-col justify-center gap-1.5"
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          <span className={`h-0.5 bg-white transition-all ${mobileOpen ? "rotate-45 translate-y-2 w-full" : "w-8"}`} />
-          <span className={`h-0.5 bg-white transition-all ${mobileOpen ? "opacity-0" : "w-6"}`} />
-          <span className={`h-0.5 bg-white transition-all ${mobileOpen ? "-rotate-45 -translate-y-2 w-full" : "w-4"}`} />
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
+      {/* 🔥 MOBILE MENU */}
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 w-full bg-[#04241b] border-b border-white/10 py-8 px-6 lg:hidden"
-          >
-            <div className="flex flex-col gap-6 items-center text-center">
+          <>
+            {/* Overlay */}
+            <motion.div
+              className="mobile-overlay"
+              onClick={() => setMobileOpen(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+
+            {/* Drawer */}
+            <motion.div
+              className="mobile-menu"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.4 }}
+            >
+              {/* ❌ CLOSE BUTTON */}
+              <button
+                onClick={() => setMobileOpen(false)}
+                style={{
+                  position: "absolute",
+                  top: "20px",
+                  right: "30px",
+                  fontSize: "28px",
+                  color: "#fff",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                }}
+              >
+                ✕
+              </button>
+
               {navLinks.map((link) => (
                 <a
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="text-sm uppercase font-bold tracking-[0.2em] text-white/80 hover:text-gold"
                 >
                   {link.name}
                 </a>
               ))}
+
               <a
                 href="#contact"
-                className="btn-base btn-primary w-full max-w-[300px]"
+                className="btn-primary"
                 onClick={() => setMobileOpen(false)}
               >
                 Schedule Viewing
               </a>
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
-    </nav>
+    </>
   );
 }
