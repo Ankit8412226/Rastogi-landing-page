@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
+import Link from "next/link";
 import { useRef } from "react";
 
 const features = [
@@ -451,9 +452,9 @@ export default function WhyUs() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.8, duration: 0.6 }}
             >
-              <a href="#contact" className="whyus-button">
+              <Link href="/#contact" className="whyus-button">
                 Schedule Elite Consultation
-              </a>
+              </Link>
             </motion.div>
 
             <motion.div

@@ -1,15 +1,22 @@
 "use client";
 
+import Link from "next/link";
+import { footerMetaPages, socialLinks } from "../lib/site-data";
+
 const links = [
-  { name: "Exclusive Residences", href: "#properties" },
-  { name: "Commercial Spaces", href: "#commercial" },
-  { name: "The Legacy", href: "#brand" },
-  { name: "Regional Insights", href: "#investment" },
-  { name: "Contact Advisory", href: "#contact" },
+  { name: "Exclusive Residences", href: "/properties?category=residential" },
+  { name: "Commercial Spaces", href: "/properties?category=commercial" },
+  { name: "The Legacy", href: "/#brand" },
+  { name: "Regional Insights", href: "/reports/regional-report" },
+  { name: "Contact Advisory", href: "/#contact" },
 ];
 
-const socials = ["IG", "LN", "FB", "WA"];
-const footerMetaLinks = ["Legal Privacy", "Portfolio Management", "Sitemap"];
+const socials = [
+  { label: "IG", href: socialLinks.instagram },
+  { label: "LN", href: socialLinks.linkedin },
+  { label: "FB", href: socialLinks.facebook },
+  { label: "WA", href: socialLinks.whatsapp },
+];
 
 export default function Footer() {
   return (
@@ -412,10 +419,10 @@ export default function Footer() {
         <div className="footer-shell">
           <div className="footer-grid">
             <div className="footer-col footer-col-brand">
-              <a href="#" className="footer-brand">
+              <Link href="/" className="footer-brand">
                 <div className="footer-brand-mark">R</div>
                 <span className="footer-brand-name">RASTOGI</span>
-              </a>
+              </Link>
 
               <p className="footer-brand-copy">
                 Greater Noida&apos;s premier luxury real estate advisory since 2007. We curate
@@ -424,8 +431,15 @@ export default function Footer() {
 
               <div className="footer-socials">
                 {socials.map((social) => (
-                  <a key={social} href="#" className="footer-social">
-                    {social}
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    className="footer-social"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Open ${social.label}`}
+                  >
+                    {social.label}
                   </a>
                 ))}
               </div>
@@ -436,9 +450,9 @@ export default function Footer() {
               <ul className="footer-nav">
                 {links.map((link) => (
                   <li key={link.name}>
-                    <a href={link.href} className="footer-nav-link">
+                    <Link href={link.href} className="footer-nav-link">
                       {link.name}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -492,10 +506,10 @@ export default function Footer() {
             </p>
 
             <div className="footer-bottom-links">
-              {footerMetaLinks.map((item) => (
-                <a key={item} href="#" className="footer-bottom-link">
-                  {item}
-                </a>
+              {footerMetaPages.map((page) => (
+                <Link key={page.slug} href={page.href} className="footer-bottom-link">
+                  {page.title}
+                </Link>
               ))}
             </div>
           </div>

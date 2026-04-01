@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { ArrowUpRight, CheckCircle2, Clock, Mail, MapPin, Phone } from "lucide-react";
 import { useRef, useState } from "react";
+import { socialLinks } from "../lib/site-data";
 
 const contactDetails = [
   { icon: MapPin, label: "Greater Noida & NCR" },
@@ -11,7 +12,12 @@ const contactDetails = [
   { icon: Clock, label: "Mon-Sat, 9AM-7PM" },
 ];
 
-const socials = ["IG", "LI", "TW", "YT"];
+const socials = [
+  { label: "IG", href: socialLinks.instagram },
+  { label: "LI", href: socialLinks.linkedin },
+  { label: "FB", href: socialLinks.facebook },
+  { label: "WA", href: socialLinks.whatsapp },
+];
 
 const buttonStyles = `
   position: relative;
@@ -636,10 +642,17 @@ export default function LeadForm() {
               </div>
 
               <div className="leadform-socials">
-                {socials.map((label) => (
-                  <button key={label} type="button" className="leadform-social">
-                    {label}
-                  </button>
+                {socials.map((social) => (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    className="leadform-social"
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Open ${social.label}`}
+                  >
+                    {social.label}
+                  </a>
                 ))}
               </div>
             </motion.div>

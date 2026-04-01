@@ -1,34 +1,9 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
+import Link from "next/link";
 import { useRef } from "react";
-
-const areas = [
-  {
-    name: "Yamuna Expressway",
-    tagline: "The Future of Aviation & Tech",
-    price: "INR 1.85 Cr onwards",
-    image:
-      "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80",
-    stats: "240% Growth (5Y)",
-  },
-  {
-    name: "Noida Expressway",
-    tagline: "Institutional Hub & Elite Corridors",
-    price: "INR 3.20 Cr onwards",
-    image:
-      "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
-    stats: "18% CAGR",
-  },
-  {
-    name: "Greater Noida West",
-    tagline: "Connectivity & Modern Infrastructure",
-    price: "INR 1.45 Cr onwards",
-    image:
-      "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80",
-    stats: "140+ Projects",
-  },
-];
+import { areas } from "../lib/site-data";
 
 export default function Areas() {
   const ref = useRef(null);
@@ -123,6 +98,8 @@ export default function Areas() {
           box-shadow: 0 20px 45px rgba(15, 23, 42, 0.1);
           padding: 2.5rem;
           cursor: pointer;
+          color: inherit;
+          text-decoration: none;
           transition:
             transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
             box-shadow 0.45s ease;
@@ -388,32 +365,35 @@ export default function Areas() {
           <div className="areas-grid">
             {areas.map((area, idx) => (
               <motion.div
-                key={area.name}
+                key={area.slug}
                 initial={{ opacity: 0, y: 40 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: idx * 0.2, duration: 1 }}
-                className="areas-card"
               >
-                <div className="areas-card-media">
-                  <img src={area.image} alt={area.name} />
-                  <div className="areas-card-overlay" />
-                </div>
+                <Link href={`/locations/${area.slug}`} className="areas-card">
+                  <div className="areas-card-media">
+                    <img src={area.image} alt={area.name} />
+                    <div className="areas-card-overlay" />
+                  </div>
 
-                <div className="areas-card-content">
-                  <span className="areas-tagline">{area.tagline}</span>
-                  <h3 className="areas-name">{area.name}</h3>
+                  <div className="areas-card-content">
+                    <span className="areas-tagline">{area.tagline}</span>
+                    <h3 className="areas-name">{area.name}</h3>
 
-                  <div className="areas-meta">
-                    <div className="areas-meta-item">
-                      <span className="areas-meta-label">Starting Price</span>
-                      <span className="areas-meta-value">{area.price}</span>
-                    </div>
-                    <div className="areas-meta-item">
-                      <span className="areas-meta-label">Growth Stat</span>
-                      <span className="areas-meta-value areas-meta-value-accent">{area.stats}</span>
+                    <div className="areas-meta">
+                      <div className="areas-meta-item">
+                        <span className="areas-meta-label">Starting Price</span>
+                        <span className="areas-meta-value">{area.price}</span>
+                      </div>
+                      <div className="areas-meta-item">
+                        <span className="areas-meta-label">Growth Stat</span>
+                        <span className="areas-meta-value areas-meta-value-accent">
+                          {area.stats}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               </motion.div>
             ))}
           </div>
@@ -424,9 +404,9 @@ export default function Areas() {
             transition={{ delay: 0.8, duration: 0.6 }}
             className="areas-cta-wrap"
           >
-            <a href="#contact" className="areas-cta">
+            <Link href="/reports/regional-report" className="areas-cta">
               Request Regional Report (2025)
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>

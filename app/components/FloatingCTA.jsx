@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { socialLinks } from "../lib/site-data";
 
 const InstagramIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
@@ -16,6 +17,26 @@ const FacebookIcon = () => (
 
 export default function FloatingCTA() {
   const [isOpen, setIsOpen] = useState(false);
+  const socials = [
+    {
+      icon: <InstagramIcon />,
+      bg: "bg-gradient-to-tr from-pink-500 to-purple-600",
+      href: socialLinks.instagram,
+      label: "Instagram",
+    },
+    {
+      icon: <LinkedinIcon />,
+      bg: "bg-blue-600",
+      href: socialLinks.linkedin,
+      label: "LinkedIn",
+    },
+    {
+      icon: <FacebookIcon />,
+      bg: "bg-blue-800",
+      href: socialLinks.facebook,
+      label: "Facebook",
+    },
+  ];
 
   return (
     <div className="fixed bottom-10 right-10 z-110 flex flex-col items-center gap-4">
@@ -28,15 +49,14 @@ export default function FloatingCTA() {
             exit={{ opacity: 0, scale: 0.8, y: 20 }}
             className="flex flex-col gap-4 mb-4"
           >
-            {[
-              { icon: <InstagramIcon />, bg: "bg-gradient-to-tr from-pink-500 to-purple-600" },
-              { icon: <LinkedinIcon />, bg: "bg-blue-600" },
-              { icon: <FacebookIcon />, bg: "bg-blue-800" },
-            ].map((social, i) => (
+            {socials.map((social) => (
               <a
-                key={i}
-                href="#"
+                key={social.label}
+                href={social.href}
                 className={`w-14 h-14 rounded-full ${social.bg} text-white flex-center shadow-2xl transition-transform transform hover:scale-110`}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={`Open ${social.label}`}
               >
                 {social.icon}
               </a>

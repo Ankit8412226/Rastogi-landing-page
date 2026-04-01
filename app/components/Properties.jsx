@@ -3,43 +3,9 @@
 import { motion, useInView } from "framer-motion";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRef } from "react";
-
-const properties = [
-  {
-    id: 1,
-    title: "Yamuna Expressway Plots",
-    location: "Sector 18, 20 & 22",
-    tag: "Investment High-Yield",
-    price: "INR 2.45 Cr onwards",
-    image: "/images/property_1.png",
-    note: "Fast-moving corridor",
-    detailA: "Premium Land Bank",
-    detailB: "Long-term Growth",
-  },
-  {
-    id: 2,
-    title: "Luxury Villas & Floors",
-    location: "Noida Expressway, Sector 150",
-    tag: "Residential",
-    price: "INR 3.80 Cr onwards",
-    image: "/images/property_2.png",
-    note: "Private estate living",
-    detailA: "Resort-style Access",
-    detailB: "Low Density",
-  },
-  {
-    id: 3,
-    title: "High-End Office Spaces",
-    location: "Advant Navis, Greater Noida West",
-    tag: "Commercial",
-    price: "INR 1.20 Cr onwards",
-    image: "/images/property_3.png",
-    note: "Institutional-grade asset",
-    detailA: "Yield Focused",
-    detailB: "Business District",
-  },
-];
+import { properties } from "../lib/site-data";
 
 export default function Properties() {
   const ref = useRef(null);
@@ -241,6 +207,7 @@ export default function Properties() {
           border: 1px solid rgba(255, 255, 255, 0.16);
           backdrop-filter: blur(14px);
           z-index: 2;
+          text-decoration: none;
           transition: transform 0.35s ease, background 0.35s ease, border-color 0.35s ease;
         }
 
@@ -418,6 +385,7 @@ export default function Properties() {
           color: #94a3b8;
           font-size: 0.92rem;
           font-weight: 600;
+          text-decoration: none;
           transition: color 0.35s ease, transform 0.35s ease;
         }
 
@@ -615,9 +583,13 @@ export default function Properties() {
 
                   <div className="property-tag">{property.tag}</div>
 
-                  <div className="property-arrow">
+                  <Link
+                    href={`/properties/${property.slug}`}
+                    className="property-arrow"
+                    aria-label={`Open details for ${property.title}`}
+                  >
                     <ArrowUpRight size={18} />
-                  </div>
+                  </Link>
 
                   <div className="property-media-content">
                     <div className="property-location">
@@ -656,10 +628,10 @@ export default function Properties() {
 
                   <div className="property-footer">
                     <span className="property-footer-label">Explore Property</span>
-                    <span className="property-footer-link">
+                    <Link href={`/properties/${property.slug}`} className="property-footer-link">
                       Private tour
                       <ArrowUpRight size={15} />
-                    </span>
+                    </Link>
                   </div>
                 </div>
               </motion.article>
@@ -672,9 +644,9 @@ export default function Properties() {
             transition={{ delay: 0.8, duration: 0.6 }}
             className="properties-cta-wrap"
           >
-            <a href="#properties" className="properties-cta">
+            <Link href="/properties" className="properties-cta">
               Explore All Listings
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>

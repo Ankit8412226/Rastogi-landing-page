@@ -3,7 +3,10 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowUpRight, ChevronDown, MapPin, Search, ShieldCheck } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import { properties } from "../lib/site-data";
 
 const stats = [
   { label: "Years of Trust", value: "18+" },
@@ -22,10 +25,30 @@ const featuredHighlights = [
 
 export default function Hero() {
   const ref = useRef(null);
+  const router = useRouter();
   const { scrollY } = useScroll();
   const yBg = useTransform(scrollY, [0, 600], [0, 160]);
   const opScroll = useTransform(scrollY, [0, 300], [1, 0]);
   const [active, setActive] = useState("Residential");
+  const [searchQuery, setSearchQuery] = useState("");
+  const featuredProperty =
+    properties.find((property) => property.category === "residential") ?? properties[0];
+  const featuredTitleParts = featuredProperty.title.split(" & ");
+  const featuredTitle = featuredTitleParts[0];
+  const featuredAccent = featuredTitleParts.slice(1).join(" & ");
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+
+    const params = new URLSearchParams();
+    params.set("category", active.toLowerCase());
+
+    if (searchQuery.trim()) {
+      params.set("query", searchQuery.trim());
+    }
+
+    router.push(`/properties?${params.toString()}`);
+  };
 
   return (
     <>
@@ -431,12 +454,15 @@ export default function Hero() {
         .hero-card {
           position: relative;
           width: min(100%, 20rem);
+          display: block;
           border-radius: 1.5rem;
           overflow: hidden;
           cursor: pointer;
           background: linear-gradient(160deg, rgba(13, 51, 38, 0.97) 0%, rgba(3, 26, 19, 0.99) 100%);
           border: 1px solid rgba(255, 255, 255, 0.08);
           box-shadow: 0 40px 80px rgba(0, 0, 0, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+          color: inherit;
+          text-decoration: none;
           transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease;
         }
 
@@ -981,7 +1007,7 @@ export default function Hero() {
                 ))}
               </div>
 
-              <div className="hero-search-bar">
+              <form className="hero-search-bar" onSubmit={handleSearch}>
                 <div className="hero-search-fields">
                   <div className="hero-search-field hero-search-field-main">
                     <div className="hero-icon-box">
@@ -993,6 +1019,8 @@ export default function Hero() {
                         className="hero-search-input"
                         type="text"
                         placeholder={`Search premium ${active.toLowerCase()}...`}
+                        value={searchQuery}
+                        onChange={(event) => setSearchQuery(event.target.value)}
                       />
                     </div>
                   </div>
@@ -1010,11 +1038,11 @@ export default function Hero() {
                   </div>
                 </div>
 
-                <button type="button" className="hero-search-cta">
+                <button type="submit" className="hero-search-cta">
                   <span>Find Property</span>
                   <ArrowUpRight size={13} />
                 </button>
-              </div>
+              </form>
             </motion.div>
 
             <motion.div
@@ -1041,7 +1069,7 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.85, duration: 1, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="hero-card">
+            <Link href={`/properties/${featuredProperty.slug}`} className="hero-card">
               <div className="hero-card-top-stripe" />
               <div className="hero-card-ambient" />
 
@@ -1058,13 +1086,15 @@ export default function Hero() {
                 </div>
 
                 <div className="hero-card-title-wrap">
-                  <p className="hero-card-title">The Legacy</p>
-                  <p className="hero-card-title-accent">Estate</p>
+                  <p className="hero-card-title">{featuredTitle}</p>
+                  {featuredAccent ? (
+                    <p className="hero-card-title-accent">{featuredAccent}</p>
+                  ) : null}
                 </div>
 
                 <div className="hero-card-location">
                   <MapPin size={11} color="rgba(201,168,76,0.65)" />
-                  <span>Sector 150, Greater Noida</span>
+                  <span>{featuredProperty.location}</span>
                 </div>
 
                 <div className="hero-card-divider" />
@@ -1100,13 +1130,10 @@ export default function Hero() {
                 <div className="hero-card-image">
                   <Image
                     className="hero-card-image-asset"
-                    src="/images/property_1.png"
-                    alt="The Legacy Estate preview"
+                    src={featuredProperty.image}
+                    alt={`${featuredProperty.title} preview`}
                     fill
                     sizes="(max-width: 1023px) 24rem, 20rem"
-                    onError={(event) => {
-                      event.currentTarget.style.display = "none";
-                    }}
                   />
 
                   <div className="hero-card-preview">
@@ -1124,7 +1151,7 @@ export default function Hero() {
                   <span className="hero-card-footer-link">View details</span>
                 </div>
               </div>
-            </div>
+            </Link>
           </motion.div>
         </div>
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
+import Link from "next/link";
 import { useRef } from "react";
 
 const investmentTips = [
@@ -390,9 +391,9 @@ export default function Investment() {
             className="investment-footer"
           >
             <p className="investment-footer-note">Trust the Numbers</p>
-            <a href="#contact" className="investment-button">
+            <Link href="/reports/market-forecast" className="investment-button">
               Download 2025 Market Forecast
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>

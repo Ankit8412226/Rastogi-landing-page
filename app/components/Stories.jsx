@@ -1,31 +1,9 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
+import Link from "next/link";
 import { useRef } from "react";
-
-const stories = [
-  {
-    title: "Greater Noida: In-Transit Real Estate Powerhouse",
-    tag: "Market Insights",
-    image:
-      "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1200&q=80",
-    time: "2 days ago",
-  },
-  {
-    title: "Jewar Airport Evolution: Impact on Regional Wealth",
-    tag: "Investment",
-    image:
-      "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80",
-    time: "5 days ago",
-  },
-  {
-    title: "The Ultimate Guide to Commercial SCO Plots",
-    tag: "Commercial",
-    image:
-      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1200&q=80",
-    time: "1 week ago",
-  },
-];
+import { stories } from "../lib/site-data";
 
 export default function Stories() {
   const ref = useRef(null);
@@ -116,6 +94,8 @@ export default function Stories() {
           align-items: center;
           text-align: center;
           cursor: pointer;
+          color: inherit;
+          text-decoration: none;
         }
 
         .stories-media {
@@ -362,28 +342,29 @@ export default function Stories() {
 
           <div className="stories-grid">
             {stories.map((story, i) => (
-              <motion.article
-                key={story.title}
+              <motion.div
+                key={story.slug}
                 initial={{ opacity: 0, y: 30 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ delay: i * 0.15, duration: 0.8 }}
-                className="stories-card"
               >
-                <div className="stories-media">
-                  <img src={story.image} alt={story.title} />
-                  <div className="stories-tag">{story.tag}</div>
-                  <div className="stories-overlay" />
-                </div>
-
-                <div className="stories-content">
-                  <span className="stories-time">{story.time}</span>
-                  <h3 className="stories-name">{story.title}</h3>
-                  <div className="stories-link">
-                    Explore Insights
-                    <span className="stories-link-arrow">→</span>
+                <Link href={`/insights/${story.slug}`} className="stories-card">
+                  <div className="stories-media">
+                    <img src={story.image} alt={story.title} />
+                    <div className="stories-tag">{story.tag}</div>
+                    <div className="stories-overlay" />
                   </div>
-                </div>
-              </motion.article>
+
+                  <div className="stories-content">
+                    <span className="stories-time">{story.time}</span>
+                    <h3 className="stories-name">{story.title}</h3>
+                    <div className="stories-link">
+                      Explore Insights
+                      <span className="stories-link-arrow">→</span>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
             ))}
           </div>
 
@@ -393,9 +374,9 @@ export default function Stories() {
             transition={{ delay: 0.8, duration: 0.6 }}
             className="stories-cta-wrap"
           >
-            <a href="#contact" className="stories-cta">
+            <Link href="/insights" className="stories-cta">
               Explore Knowledge Hub
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>

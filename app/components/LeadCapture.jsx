@@ -2,6 +2,7 @@
 
 import { motion, useInView } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import { useRef, useState } from "react";
 
 const interests = [
@@ -43,6 +44,25 @@ export default function LeadCapture() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const [activeInterest, setActiveInterest] = useState(interests[0]);
+  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    vision: "",
+  });
+  const interestHrefMap = {
+    "Residential Portfolio": "/properties?category=residential",
+    "Commercial Assets": "/properties?category=commercial",
+    "Premium Plots": "/properties?category=plots",
+    "Investment Advisory": "/reports/market-forecast",
+  };
+  const followUpHref = interestHrefMap[activeInterest] ?? "/properties";
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    setSubmitted(true);
+  };
 
   return (
     <>
@@ -390,6 +410,95 @@ export default function LeadCapture() {
           letter-spacing: 0.22em;
         }
 
+        .leadcapture-success {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 1.25rem;
+          padding: 2.5rem;
+        }
+
+        .leadcapture-success-kicker {
+          color: #d4af37;
+          font-size: 0.62rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.24em;
+        }
+
+        .leadcapture-success-title {
+          margin: 0;
+          color: #064e3b;
+          font-size: 2rem;
+          font-weight: 800;
+          line-height: 1.1;
+          letter-spacing: -0.04em;
+        }
+
+        .leadcapture-success-copy {
+          margin: 0;
+          color: #64748b;
+          font-size: 0.95rem;
+          line-height: 1.8;
+        }
+
+        .leadcapture-success-panel {
+          border-radius: 1.5rem;
+          border: 1px solid rgba(6, 78, 59, 0.08);
+          background: #f8faf9;
+          padding: 1.25rem;
+        }
+
+        .leadcapture-success-label {
+          margin: 0 0 0.35rem;
+          color: #94a3b8;
+          font-size: 0.62rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.18em;
+        }
+
+        .leadcapture-success-value {
+          margin: 0;
+          color: #064e3b;
+          font-size: 1rem;
+          font-weight: 700;
+          line-height: 1.6;
+        }
+
+        .leadcapture-success-actions {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 1rem;
+          padding-top: 0.25rem;
+        }
+
+        .leadcapture-secondary {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 1.05rem 1.5rem;
+          border-radius: 999px;
+          border: 1px solid rgba(6, 78, 59, 0.12);
+          color: #064e3b;
+          font-size: 0.72rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.22em;
+          text-decoration: none;
+          transition:
+            transform 0.35s ease,
+            border-color 0.35s ease,
+            color 0.35s ease;
+        }
+
+        .leadcapture-secondary:hover {
+          transform: translateY(-2px);
+          border-color: rgba(212, 175, 55, 0.5);
+          color: #d4af37;
+        }
+
         @media (min-width: 768px) {
           .leadcapture-root {
             padding: 5rem 0;
@@ -498,82 +607,123 @@ export default function LeadCapture() {
               transition={{ delay: 0.3, duration: 1 }}
               className="leadcapture-card"
             >
-              <form className="leadcapture-form" onSubmit={(event) => event.preventDefault()}>
-                <div className="leadcapture-form-head">
-                  <h3 className="leadcapture-form-title">Private Consultation Request</h3>
-                  <p className="leadcapture-form-copy">
-                    Share your brief. We&apos;ll match you with the right inventory and market
-                    strategy.
+              {submitted ? (
+                <div className="leadcapture-success">
+                  <span className="leadcapture-success-kicker">Request Logged</span>
+                  <h3 className="leadcapture-success-title">Your private brief is ready.</h3>
+                  <p className="leadcapture-success-copy">
+                    Until live CRM integration is added, this form now completes as a working UI
+                    flow and sends you to the most relevant next page based on your selected
+                    interest.
                   </p>
-                </div>
 
-                <div className="leadcapture-grid">
+                  <div className="leadcapture-success-panel">
+                    <p className="leadcapture-success-label">Selected Interest</p>
+                    <p className="leadcapture-success-value">{activeInterest}</p>
+                  </div>
+
+                  <div className="leadcapture-success-actions">
+                    <Link href={followUpHref} className="leadcapture-submit">
+                      Continue to Matching Page
+                      <ArrowUpRight size={16} />
+                    </Link>
+                    <button
+                      type="button"
+                      className="leadcapture-secondary"
+                      onClick={() => setSubmitted(false)}
+                    >
+                      Submit Another Brief
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <form className="leadcapture-form" onSubmit={handleSubmit}>
+                  <div className="leadcapture-form-head">
+                    <h3 className="leadcapture-form-title">Private Consultation Request</h3>
+                    <p className="leadcapture-form-copy">
+                      Share your brief. We&apos;ll match you with the right inventory and market
+                      strategy.
+                    </p>
+                  </div>
+
+                  <div className="leadcapture-grid">
+                    <div className="leadcapture-field">
+                      <label className="leadcapture-label">Full Name</label>
+                      <input
+                        type="text"
+                        className="leadcapture-input"
+                        placeholder="Alexander Hamilton"
+                        value={form.name}
+                        onChange={(event) => setForm({ ...form, name: event.target.value })}
+                        required
+                      />
+                    </div>
+
+                    <div className="leadcapture-field">
+                      <label className="leadcapture-label">Contact Number</label>
+                      <input
+                        type="tel"
+                        className="leadcapture-input"
+                        placeholder="+91 000 000 0000"
+                        value={form.phone}
+                        onChange={(event) => setForm({ ...form, phone: event.target.value })}
+                        required
+                      />
+                    </div>
+                  </div>
+
                   <div className="leadcapture-field">
-                    <label className="leadcapture-label">Full Name</label>
+                    <label className="leadcapture-label">Email Address</label>
                     <input
-                      type="text"
+                      type="email"
                       className="leadcapture-input"
-                      placeholder="Alexander Hamilton"
+                      placeholder="alexander@legacy.com"
+                      value={form.email}
+                      onChange={(event) => setForm({ ...form, email: event.target.value })}
                     />
                   </div>
 
                   <div className="leadcapture-field">
-                    <label className="leadcapture-label">Contact Number</label>
-                    <input
-                      type="tel"
-                      className="leadcapture-input"
-                      placeholder="+91 000 000 0000"
+                    <label className="leadcapture-label">Portfolio Interest</label>
+                    <div className="leadcapture-tags">
+                      {interests.map((tag) => (
+                        <button
+                          key={tag}
+                          type="button"
+                          onClick={() => setActiveInterest(tag)}
+                          className={`leadcapture-tag ${
+                            activeInterest === tag ? "leadcapture-tag-active" : ""
+                          }`}
+                        >
+                          {tag}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="leadcapture-field">
+                    <label className="leadcapture-label">Your Vision (Optional)</label>
+                    <textarea
+                      rows={4}
+                      className="leadcapture-textarea"
+                      placeholder="Describe your investment objectives..."
+                      value={form.vision}
+                      onChange={(event) => setForm({ ...form, vision: event.target.value })}
                     />
                   </div>
-                </div>
 
-                <div className="leadcapture-field">
-                  <label className="leadcapture-label">Email Address</label>
-                  <input
-                    type="email"
-                    className="leadcapture-input"
-                    placeholder="alexander@legacy.com"
-                  />
-                </div>
-
-                <div className="leadcapture-field">
-                  <label className="leadcapture-label">Portfolio Interest</label>
-                  <div className="leadcapture-tags">
-                    {interests.map((tag) => (
-                      <button
-                        key={tag}
-                        type="button"
-                        onClick={() => setActiveInterest(tag)}
-                        className={`leadcapture-tag ${
-                          activeInterest === tag ? "leadcapture-tag-active" : ""
-                        }`}
-                      >
-                        {tag}
-                      </button>
-                    ))}
+                  <div className="leadcapture-submit-wrap">
+                    <button type="submit" className="leadcapture-submit">
+                      Check Exclusive Inventory
+                      <ArrowUpRight size={16} />
+                    </button>
                   </div>
-                </div>
 
-                <div className="leadcapture-field">
-                  <label className="leadcapture-label">Your Vision (Optional)</label>
-                  <textarea
-                    rows={4}
-                    className="leadcapture-textarea"
-                    placeholder="Describe your investment objectives..."
-                  />
-                </div>
-
-                <div className="leadcapture-submit-wrap">
-                  <button type="submit" className="leadcapture-submit">
-                    Check Exclusive Inventory
-                    <ArrowUpRight size={16} />
-                  </button>
-                </div>
-
-                <p className="leadcapture-note">
-                  Your data is protected by grade-A encryption and privacy protocols.
-                </p>
-              </form>
+                  <p className="leadcapture-note">
+                    Your data is protected by grade-A encryption and privacy protocols.
+                  </p>
+                </form>
+              )}
             </motion.div>
           </div>
         </div>

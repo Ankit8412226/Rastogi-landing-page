@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
+import Link from "next/link";
 import { useRef } from "react";
 
 const services = [
@@ -394,9 +395,9 @@ export default function LuxuryConcierge() {
             transition={{ delay: 0.8, duration: 0.6 }}
             className="concierge-actions"
           >
-            <a href="#contact" className="concierge-button">
+            <Link href="/#contact" className="concierge-button">
               Request Private Consultation
-            </a>
+            </Link>
             <span className="concierge-note">Confidentiality Assured.</span>
           </motion.div>
         </div>

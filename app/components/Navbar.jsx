@@ -1,13 +1,14 @@
 "use client";
 import { AnimatePresence, motion } from "framer-motion";
+import Link from "next/link";
 import { useState } from "react";
 
 const navLinks = [
-  { name: "Residences", href: "#properties" },
-  { name: "Commercial", href: "#commercial" },
-  { name: "The Legacy", href: "#brand" },
-  { name: "Investment", href: "#investment" },
-  { name: "Contact", href: "#contact" },
+  { name: "Residences", href: "/#properties" },
+  { name: "Commercial", href: "/properties?category=commercial" },
+  { name: "The Legacy", href: "/#brand" },
+  { name: "Investment", href: "/reports/market-forecast" },
+  { name: "Contact", href: "/#contact" },
 ];
 
 export default function Navbar() {
@@ -149,27 +150,27 @@ export default function Navbar() {
         <div className="nav-inner">
 
           {/* Logo */}
-          <a className="nav-logo" href="#">
+          <Link className="nav-logo" href="/">
             <div className="nav-logo-monogram">
               <span style={{ color: "#d4af37" }}>R</span>
             </div>
             <span className="nav-logo-name">RASTOGI</span>
-          </a>
+          </Link>
 
           {/* Desktop Links */}
           <ul className="nav-links">
             {navLinks.map((link) => (
               <li key={link.name}>
-                <a href={link.href}>{link.name}</a>
+                <Link href={link.href}>{link.name}</Link>
               </li>
             ))}
           </ul>
 
           {/* Right */}
           <div className="nav-right">
-            <a href="#contact" className="btn-primary">
+            <Link href="/#contact" className="btn-primary">
               Schedule Viewing
-            </a>
+            </Link>
 
             {/* ✅ Hide when open */}
             {!mobileOpen && (
@@ -226,22 +227,22 @@ export default function Navbar() {
               </button>
 
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.name}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
 
-              <a
-                href="#contact"
+              <Link
+                href="/#contact"
                 className="btn-primary"
                 onClick={() => setMobileOpen(false)}
               >
                 Schedule Viewing
-              </a>
+              </Link>
             </motion.div>
           </>
         )}

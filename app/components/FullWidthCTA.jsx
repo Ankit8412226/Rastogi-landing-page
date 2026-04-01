@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
+import Link from "next/link";
 import { useRef } from "react";
 
 export default function FullWidthCTA() {
@@ -308,9 +309,9 @@ export default function FullWidthCTA() {
               transition={{ delay: 0.6, duration: 0.8 }}
               className="fwcta-actions"
             >
-              <a href="#contact" className="fwcta-button">
+              <Link href="/#contact" className="fwcta-button">
                 Request VIP Briefing
-              </a>
+              </Link>
 
               <div className="fwcta-contact">
                 <span className="fwcta-contact-label">Member Direct</span>

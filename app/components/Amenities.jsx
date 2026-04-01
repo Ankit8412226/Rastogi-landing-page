@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
+import Link from "next/link";
 import { useRef } from "react";
 
 const amenities = [
@@ -396,9 +397,9 @@ export default function Amenities() {
             transition={{ delay: 1, duration: 1 }}
             className="amenities-actions"
           >
-            <a href="#contact" className="amenities-button">
+            <Link href="/properties" className="amenities-button">
               View All Features & Facilities
-            </a>
+            </Link>
           </motion.div>
         </div>
       </section>
