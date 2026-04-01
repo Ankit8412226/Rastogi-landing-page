@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { footerMetaPages, socialLinks } from "../lib/site-data";
 
@@ -64,17 +65,23 @@ export default function Footer() {
         }
 
         .footer-brand-mark {
-          width: 2.75rem;
-          height: 2.75rem;
+          width: 3.2rem;
+          height: 3.2rem;
+          padding: 0.2rem;
           display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: 999px;
-          background: #d4af37;
-          color: #04241b;
-          font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
-          font-size: 1.25rem;
-          font-weight: 700;
+          border-radius: 1rem;
+          border: 1px solid rgba(212, 175, 55, 0.35);
+          background: rgba(255, 255, 255, 0.96);
+          overflow: hidden;
+          box-shadow: 0 14px 28px rgba(0, 0, 0, 0.16);
+        }
+
+        .footer-brand-mark img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
         }
 
         .footer-brand-name {
@@ -420,7 +427,14 @@ export default function Footer() {
           <div className="footer-grid">
             <div className="footer-col footer-col-brand">
               <Link href="/" className="footer-brand">
-                <div className="footer-brand-mark">R</div>
+                <div className="footer-brand-mark">
+                  <Image
+                    src="/images/Rustamlogo.jpeg"
+                    alt="Rastogi logo"
+                    width={48}
+                    height={48}
+                  />
+                </div>
                 <span className="footer-brand-name">RASTOGI</span>
               </Link>
 

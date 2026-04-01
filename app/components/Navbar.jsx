@@ -1,5 +1,6 @@
 "use client";
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -44,12 +45,23 @@ export default function Navbar() {
         }
 
         .nav-logo-monogram {
-          width: 44px;
-          height: 44px;
+          width: 52px;
+          height: 52px;
+          padding: 4px;
           border: 1px solid rgba(212,175,55,0.5);
+          border-radius: 14px;
+          background: rgba(255,255,255,0.96);
           display: flex;
           align-items: center;
           justify-content: center;
+          overflow: hidden;
+          box-shadow: 0 10px 24px rgba(0,0,0,0.14);
+        }
+
+        .nav-logo-monogram img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
         }
 
         .nav-logo-name {
@@ -152,7 +164,13 @@ export default function Navbar() {
           {/* Logo */}
           <Link className="nav-logo" href="/">
             <div className="nav-logo-monogram">
-              <span style={{ color: "#d4af37" }}>R</span>
+              <Image
+                src="/images/Rustamlogo.jpeg"
+                alt="Rastogi logo"
+                width={44}
+                height={44}
+                priority
+              />
             </div>
             <span className="nav-logo-name">RASTOGI</span>
           </Link>
