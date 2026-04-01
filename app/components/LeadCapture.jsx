@@ -1,110 +1,552 @@
 "use client";
+
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { ArrowUpRight } from "lucide-react";
+import { useRef, useState } from "react";
+
+const interests = [
+  "Residential Portfolio",
+  "Commercial Assets",
+  "Premium Plots",
+  "Investment Advisory",
+];
+
+const contactItems = [
+  { icon: "📞", tag: "Direct Advisory", value: "+91 999 000 0000" },
+  { icon: "✉️", tag: "Electronic Mail", value: "private@rastogi.luxury" },
+];
+
+const buttonStyles = `
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  overflow: hidden;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #d4af37 0%, #bf9460 100%);
+  box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+  text-decoration: none;
+  transition:
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease;
+`;
 
 export default function LeadCapture() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const [activeInterest, setActiveInterest] = useState(interests[0]);
 
   return (
-    <section id="contact" className="section-padding bg-white relative overflow-hidden" ref={ref}>
-      <div className="site-container">
-        <div className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-start">
+    <>
+      <style>{`
+        .leadcapture-root {
+          position: relative;
+          width: 100%;
+          overflow: hidden;
+          background: #ffffff;
+          padding: 4rem 0;
+        }
 
-          {/* ── Left Side ── */}
-          <div className="w-full lg:w-1/2 flex flex-col justify-center">
+        .leadcapture-shell {
+          width: 100%;
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 0 1.25rem;
+        }
+
+        .leadcapture-layout {
+          display: grid;
+          grid-template-columns: minmax(0, 1fr) minmax(22rem, 1fr);
+          gap: 4rem;
+          align-items: start;
+        }
+
+        .leadcapture-copy {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .leadcapture-kicker {
+          display: inline-flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .leadcapture-kicker-line {
+          width: 2.5rem;
+          height: 1px;
+          background: #d4af37;
+          flex-shrink: 0;
+        }
+
+        .leadcapture-kicker-text {
+          color: #064e3b;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.4em;
+        }
+
+        .leadcapture-title {
+          margin: 0 0 2.25rem;
+          color: #064e3b;
+          font-size: clamp(2.6rem, 6vw, 5.8rem);
+          font-weight: 800;
+          line-height: 0.98;
+          letter-spacing: -0.05em;
+          max-width: 10ch;
+        }
+
+        .leadcapture-title-accent {
+          color: #d4af37;
+          font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+          font-style: italic;
+          font-weight: 400;
+        }
+
+        .leadcapture-contact-list {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+          margin-bottom: 2.5rem;
+        }
+
+        .leadcapture-contact {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+
+        .leadcapture-contact-icon {
+          width: 3rem;
+          height: 3rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          border-radius: 999px;
+          background: rgba(6, 78, 59, 0.05);
+          border: 1px solid rgba(6, 78, 59, 0.1);
+          font-size: 1.1rem;
+          transition:
+            transform 0.35s ease,
+            background 0.35s ease,
+            border-color 0.35s ease;
+        }
+
+        .leadcapture-contact:hover .leadcapture-contact-icon {
+          transform: translateY(-2px);
+          background: rgba(212, 175, 55, 0.1);
+          border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .leadcapture-contact-tag {
+          margin: 0 0 0.15rem;
+          color: #94a3b8;
+          font-size: 0.62rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+        }
+
+        .leadcapture-contact-value {
+          margin: 0;
+          color: #064e3b;
+          font-size: 1.05rem;
+          font-weight: 600;
+          line-height: 1.4;
+        }
+
+        .leadcapture-quote {
+          max-width: 34rem;
+          padding: 2rem 2rem 2rem 1.75rem;
+          border-left: 4px solid #d4af37;
+          border-radius: 0 1.5rem 1.5rem 0;
+          background: #f8faf9;
+        }
+
+        .leadcapture-quote-copy {
+          margin: 0 0 1.5rem;
+          color: #64748b;
+          font-size: 1rem;
+          font-style: italic;
+          line-height: 1.9;
+          font-weight: 300;
+        }
+
+        .leadcapture-quote-signoff {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+
+        .leadcapture-quote-mark {
+          width: 2.25rem;
+          height: 2.25rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 999px;
+          background: #064e3b;
+          color: #ffffff;
+          font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+          font-size: 0.95rem;
+          font-weight: 700;
+        }
+
+        .leadcapture-quote-name {
+          color: #064e3b;
+          font-size: 0.62rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+        }
+
+        .leadcapture-card {
+          position: relative;
+          border-radius: 2rem;
+          border: 1px solid rgba(6, 78, 59, 0.08);
+          background: #ffffff;
+          box-shadow: 0 26px 60px rgba(15, 23, 42, 0.08);
+          overflow: hidden;
+        }
+
+        .leadcapture-card::before {
+          content: "";
+          position: absolute;
+          inset: auto auto auto 50%;
+          top: 50%;
+          width: 120%;
+          height: 120%;
+          background: rgba(212, 175, 55, 0.05);
+          filter: blur(100px);
+          transform: translate(-50%, -50%);
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        .leadcapture-form {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 1.4rem;
+          padding: 2.5rem;
+        }
+
+        .leadcapture-form-head {
+          margin-bottom: 0.25rem;
+        }
+
+        .leadcapture-form-title {
+          margin: 0 0 0.35rem;
+          color: #064e3b;
+          font-size: 1.55rem;
+          font-weight: 800;
+        }
+
+        .leadcapture-form-copy {
+          margin: 0;
+          color: #94a3b8;
+          font-size: 0.8rem;
+          line-height: 1.7;
+        }
+
+        .leadcapture-grid {
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 1rem;
+        }
+
+        .leadcapture-field {
+          display: flex;
+          flex-direction: column;
+          gap: 0.45rem;
+        }
+
+        .leadcapture-label {
+          color: rgba(6, 78, 59, 0.6);
+          font-size: 0.62rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+        }
+
+        .leadcapture-input,
+        .leadcapture-textarea {
+          width: 100%;
+          padding: 0.95rem 0;
+          border: none;
+          border-bottom: 1px solid rgba(6, 78, 59, 0.12);
+          background: transparent;
+          color: #064e3b;
+          font-size: 0.95rem;
+          transition:
+            border-color 0.3s ease,
+            transform 0.3s ease;
+        }
+
+        .leadcapture-input::placeholder,
+        .leadcapture-textarea::placeholder {
+          color: #94a3b8;
+        }
+
+        .leadcapture-input:focus,
+        .leadcapture-textarea:focus {
+          outline: none;
+          border-color: rgba(212, 175, 55, 0.7);
+          transform: translateY(-1px);
+        }
+
+        .leadcapture-textarea {
+          min-height: 7rem;
+          resize: none;
+        }
+
+        .leadcapture-tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+        }
+
+        .leadcapture-tag {
+          padding: 0.75rem 1rem;
+          border-radius: 999px;
+          border: 1px solid #e2e8f0;
+          background: #ffffff;
+          color: #64748b;
+          font-size: 0.62rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.16em;
+          transition:
+            transform 0.3s ease,
+            border-color 0.3s ease,
+            background 0.3s ease,
+            color 0.3s ease,
+            box-shadow 0.3s ease;
+        }
+
+        .leadcapture-tag:hover {
+          transform: translateY(-2px);
+          border-color: rgba(212, 175, 55, 0.35);
+          box-shadow: 0 12px 22px rgba(15, 23, 42, 0.06);
+        }
+
+        .leadcapture-tag-active {
+          background: linear-gradient(135deg, #d4af37 0%, #bf9460 100%);
+          border-color: rgba(212, 175, 55, 0.75);
+          color: #ffffff;
+          box-shadow: 0 14px 24px rgba(212, 175, 55, 0.18);
+        }
+
+        .leadcapture-submit-wrap {
+          padding-top: 0.5rem;
+        }
+
+        .leadcapture-submit {
+          ${buttonStyles}
+          width: 100%;
+          padding: 1.05rem 1.5rem;
+        }
+
+        .leadcapture-submit::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+          transition: all 0.6s;
+        }
+
+        .leadcapture-submit:hover::before {
+          left: 100%;
+        }
+
+        .leadcapture-submit:hover {
+          transform: translateY(-4px) scale(1.02);
+          box-shadow: 0 20px 40px rgba(212, 175, 55, 0.4);
+        }
+
+        .leadcapture-note {
+          margin: 0;
+          color: #94a3b8;
+          text-align: center;
+          font-size: 0.56rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.22em;
+        }
+
+        @media (min-width: 768px) {
+          .leadcapture-root {
+            padding: 5rem 0;
+          }
+
+          .leadcapture-shell {
+            padding: 0 2.5rem;
+          }
+        }
+
+        @media (min-width: 1280px) {
+          .leadcapture-root {
+            padding: 6rem 0;
+          }
+
+          .leadcapture-shell {
+            padding: 0 5rem;
+          }
+        }
+
+        @media (max-width: 1023px) {
+          .leadcapture-layout {
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+          }
+        }
+
+        @media (max-width: 767px) {
+          .leadcapture-kicker {
+            gap: 0.75rem;
+          }
+
+          .leadcapture-kicker-text {
+            font-size: 0.66rem;
+            letter-spacing: 0.22em;
+          }
+
+          .leadcapture-title {
+            margin-bottom: 1.75rem;
+            font-size: clamp(2.15rem, 10vw, 3.7rem);
+          }
+
+          .leadcapture-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .leadcapture-quote {
+            padding: 1.5rem 1.25rem 1.5rem 1.1rem;
+          }
+
+          .leadcapture-form {
+            padding: 2rem 1.25rem;
+          }
+
+          .leadcapture-submit {
+            letter-spacing: 0.16em;
+          }
+        }
+      `}</style>
+
+      <section id="contact" className="leadcapture-root" ref={ref}>
+        <div className="leadcapture-shell">
+          <div className="leadcapture-layout">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.8 }}
-              className="flex flex-col"
+              className="leadcapture-copy"
             >
-              {/* Eyebrow */}
-              <div className="flex items-center gap-4 mb-6">
-                <span className="h-px w-10 bg-gold shrink-0" />
-                <span className="text-xs font-bold uppercase tracking-[0.4em] text-emerald">Exclusive Advisory</span>
+              <div className="leadcapture-kicker">
+                <span className="leadcapture-kicker-line" />
+                <span className="leadcapture-kicker-text">Exclusive Advisory</span>
               </div>
 
-              {/* Heading */}
-              <h2 className="cinematic-heading text-5xl md:text-6xl lg:text-7xl text-emerald leading-[0.95] mb-12">
-                Let's Discuss <br />
-                <span className="font-serif italic font-normal text-gold">Your Legacy.</span>
+              <h2 className="leadcapture-title">
+                Let&apos;s Discuss <span className="leadcapture-title-accent">Your Legacy.</span>
               </h2>
 
-              {/* Contact Items */}
-              <div className="flex flex-col gap-10 mb-10">
-                {[
-                  { icon: "📞", tag: "Direct Advisory", value: "+91 999 000 0000" },
-                  { icon: "✉️", tag: "Electronic Mail", value: "private@rastogi.luxury" },
-                ].map(({ icon, tag, value }) => (
-                  <div key={tag} className="flex items-center gap-5 group">
-                    <div className="w-11 h-11 rounded-full bg-emerald/5 flex items-center justify-center border border-emerald/10 group-hover:bg-gold group-hover:border-gold transition-all duration-500 shrink-0 text-lg">
-                      {icon}
-                    </div>
-                    <div className="flex flex-col gap-0.5">
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-slate-400">{tag}</p>
-                      <p className="text-lg font-medium text-emerald leading-tight">{value}</p>
+              <div className="leadcapture-contact-list">
+                {contactItems.map(({ icon, tag, value }) => (
+                  <div key={tag} className="leadcapture-contact">
+                    <div className="leadcapture-contact-icon">{icon}</div>
+                    <div>
+                      <p className="leadcapture-contact-tag">{tag}</p>
+                      <p className="leadcapture-contact-value">{value}</p>
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* Founder Quote */}
-              <div className="p-7 border-l-4 border-gold bg-slate-50 rounded-r-2xl mt-4">
-                <p className="text-base italic text-slate-500 font-light leading-relaxed mb-5 mt-5">
-                  "Real estate is the most tangible path to building a lasting legacy. We don't just sell plots; we architect generational wealth."
+              <div className="leadcapture-quote">
+                <p className="leadcapture-quote-copy">
+                  &ldquo;Real estate is the most tangible path to building a lasting legacy. We
+                  don&apos;t just sell plots; we architect generational wealth.&rdquo;
                 </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-emerald text-white flex items-center justify-center font-serif text-sm shrink-0">
-                    R
-                  </div>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-emerald">
-                    S.K. Rastogi — MD
-                  </span>
+                <div className="leadcapture-quote-signoff">
+                  <div className="leadcapture-quote-mark">R</div>
+                  <span className="leadcapture-quote-name">S.K. Rastogi - MD</span>
                 </div>
               </div>
             </motion.div>
-          </div>
 
-          {/* ── Right Side: Form ── */}
-          <div className="w-full lg:w-1/2">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.3, duration: 1 }}
-              className="relative"
+              className="leadcapture-card"
             >
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gold/5 blur-[100px] -z-10 rounded-full pointer-events-none" />
+              <form className="leadcapture-form" onSubmit={(event) => event.preventDefault()}>
+                <div className="leadcapture-form-head">
+                  <h3 className="leadcapture-form-title">Private Consultation Request</h3>
+                  <p className="leadcapture-form-copy">
+                    Share your brief. We&apos;ll match you with the right inventory and market
+                    strategy.
+                  </p>
+                </div>
 
-              <form className="flex flex-col gap-7" onSubmit={(e) => e.preventDefault()}>
-
-                {/* Name + Phone */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald/60">Full Name</label>
-                    <input type="text" className="text-input" placeholder="Alexander Hamilton" />
+                <div className="leadcapture-grid">
+                  <div className="leadcapture-field">
+                    <label className="leadcapture-label">Full Name</label>
+                    <input
+                      type="text"
+                      className="leadcapture-input"
+                      placeholder="Alexander Hamilton"
+                    />
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald/60">Contact Number</label>
-                    <input type="tel" className="text-input" placeholder="+91 000 000 0000" />
+
+                  <div className="leadcapture-field">
+                    <label className="leadcapture-label">Contact Number</label>
+                    <input
+                      type="tel"
+                      className="leadcapture-input"
+                      placeholder="+91 000 000 0000"
+                    />
                   </div>
                 </div>
 
-                {/* Email */}
-                <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald/60">Email Address</label>
-                  <input type="email" className="text-input" placeholder="alexander@legacy.com" />
+                <div className="leadcapture-field">
+                  <label className="leadcapture-label">Email Address</label>
+                  <input
+                    type="email"
+                    className="leadcapture-input"
+                    placeholder="alexander@legacy.com"
+                  />
                 </div>
 
-                {/* Portfolio Tags */}
-                <div className="flex flex-col gap-3">
-                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald/60">Portfolio Interest</label>
-                  <div className="flex flex-wrap gap-2.5">
-                    {["Residential Portfolio", "Commercial Assets", "Premium Plots", "Investment Advisory"].map((tag) => (
+                <div className="leadcapture-field">
+                  <label className="leadcapture-label">Portfolio Interest</label>
+                  <div className="leadcapture-tags">
+                    {interests.map((tag) => (
                       <button
                         key={tag}
                         type="button"
-                        className="px-5 py-2 rounded-full border border-slate-200 text-[10px] font-bold uppercase tracking-widest text-slate-500 hover:bg-gold hover:text-white hover:border-gold transition-all duration-300"
+                        onClick={() => setActiveInterest(tag)}
+                        className={`leadcapture-tag ${
+                          activeInterest === tag ? "leadcapture-tag-active" : ""
+                        }`}
                       >
                         {tag}
                       </button>
@@ -112,34 +554,30 @@ export default function LeadCapture() {
                   </div>
                 </div>
 
-                {/* Message */}
-                <div className="flex flex-col gap-2">
-                  <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-emerald/60">Your Vision (Optional)</label>
+                <div className="leadcapture-field">
+                  <label className="leadcapture-label">Your Vision (Optional)</label>
                   <textarea
                     rows={4}
-                    className="text-input resize-none"
+                    className="leadcapture-textarea"
                     placeholder="Describe your investment objectives..."
                   />
                 </div>
 
-                {/* Submit */}
-                <div className="pt-2">
-                  <button type="submit" className="btn-base btn-primary w-full group py-5">
+                <div className="leadcapture-submit-wrap">
+                  <button type="submit" className="leadcapture-submit">
                     Check Exclusive Inventory
-                    <span className="ml-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all duration-300 inline-block">→</span>
+                    <ArrowUpRight size={16} />
                   </button>
                 </div>
 
-                <p className="text-center text-[9px] uppercase tracking-[0.3em] text-slate-400">
-                  Your data is protected by Grade-A encryption & privacy protocols.
+                <p className="leadcapture-note">
+                  Your data is protected by grade-A encryption and privacy protocols.
                 </p>
-
               </form>
             </motion.div>
           </div>
-
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }

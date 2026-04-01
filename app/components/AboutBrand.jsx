@@ -1,6 +1,7 @@
 "use client";
-import React, { useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+
+import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 export default function AboutBrand() {
   const containerRef = useRef(null);
@@ -14,101 +15,407 @@ export default function AboutBrand() {
   const yImage = useTransform(scrollYProgress, [0, 1], [-50, 50]);
 
   return (
-    <section id="brand" ref={containerRef} className="section-padding bg-white overflow-hidden w-full">
-      <div className="site-container flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
-        
-        {/* Left Column: Text Content */}
-        <div className="w-full lg:w-1/2 flex flex-col items-start text-left order-2 lg:order-1">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="flex items-center gap-4 mb-8"
-          >
-            <span className="h-px w-10 bg-gold" />
-            <span className="text-xs font-bold uppercase tracking-[0.3em] text-emerald">The Brand Story</span>
-          </motion.div>
+    <>
+      <style>{`
+        .about-root {
+          width: 100%;
+          overflow: hidden;
+          background: #ffffff;
+          padding: 4rem 0;
+        }
 
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="cinematic-heading text-4xl md:text-5xl lg:text-7xl text-emerald mb-8 leading-[1.1]"
-          >
-            Building <br />
-            <span className="font-serif italic font-normal text-gold">Generational Wealth</span>
-          </motion.h2>
+        .about-shell {
+          width: 100%;
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 0 1.25rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4rem;
+        }
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={inView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.4, duration: 1 }}
-            className="space-y-6 text-base md:text-lg text-slate-600 leading-relaxed max-w-xl"
-          >
-            <p>
-              Founded in 2007, Rastogi Properties emerged with a singular vision: to bring unprecedented transparency, elegance, and return on investment to the Greater Noida real estate market.
-            </p>
-            <p>
-              We recognize that fine real estate is not merely a transaction; it is a vital cornerstone of your portfolio and a sanctuary for your family. Our team of elite negotiators and market analysts specialize strictly in Grade-A developments across Noida Expressway and the upcoming Jewar Airport region.
-            </p>
-          </motion.div>
+        .about-copy,
+        .about-media-wrap {
+          width: 100%;
+        }
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.6, duration: 0.6 }}
-            className="mt-12 flex items-center gap-6"
-          >
-            <div className="w-16 h-16 rounded-full bg-emerald flex-center text-white font-serif text-2xl shadow-xl">
-              R
-            </div>
-            <div>
-              <p className="text-sm font-bold uppercase tracking-widest text-emerald">S.K. Rastogi</p>
-              <p className="text-xs font-medium text-gold">Founder & Managing Director</p>
-            </div>
-          </motion.div>
-        </div>
+        .about-copy {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          text-align: left;
+          order: 2;
+        }
 
-        {/* Right Column: Image with Experience Badge */}
-        <div className="w-full lg:w-1/2 relative order-1 lg:order-2 flex justify-center lg:justify-end">
-          <motion.div
-            style={{ y: yImage }}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={inView ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 1 }}
-            className="relative w-full max-w-[500px]"
-          >
-            {/* Main Image Container */}
-            <div className="relative aspect-[3/4] rounded-[32px] overflow-hidden shadow-2xl border-4 border-gold/10">
-              <img
-                src="https://images.unsplash.com/photo-1577412647305-991150c7d163?auto=format&fit=crop&w=1000&q=80"
-                alt="Elite Real Estate Advisory"
-                className="w-full h-full object-cover"
-              />
-              {/* Gold gradient overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-emerald/40 to-transparent" />
-            </div>
+        .about-kicker {
+          display: inline-flex;
+          align-items: center;
+          gap: 1rem;
+          margin-bottom: 2rem;
+        }
 
-            {/* Experience Badge - Balanced & Symmetric */}
+        .about-kicker-line {
+          width: 2.5rem;
+          height: 1px;
+          background: #d4af37;
+        }
+
+        .about-kicker-text {
+          color: #064e3b;
+          font-size: 0.75rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.3em;
+        }
+
+        .about-title {
+          margin: 0 0 2rem;
+          color: #064e3b;
+          font-size: clamp(2.35rem, 5vw, 5.8rem);
+          font-weight: 800;
+          line-height: 1.06;
+          letter-spacing: -0.04em;
+        }
+
+        .about-title-accent {
+          color: #d4af37;
+          font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+          font-style: italic;
+          font-weight: 400;
+        }
+
+        .about-body {
+          max-width: 38rem;
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+          color: #475569;
+          font-size: clamp(1rem, 1.4vw, 1.125rem);
+          line-height: 1.85;
+          font-weight: 400;
+        }
+
+        .about-signoff {
+          margin-top: 3rem;
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+        }
+
+        .about-monogram {
+          width: 4rem;
+          height: 4rem;
+          border-radius: 999px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #064e3b;
+          box-shadow: 0 20px 35px rgba(6, 78, 59, 0.18);
+          color: #ffffff;
+          font-family: var(--font-playfair), "Playfair Display", Georgia, serif;
+          font-size: 2rem;
+        }
+
+        .about-signoff-name {
+          margin-bottom: 0.35rem;
+          color: #064e3b;
+          font-size: 0.82rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.24em;
+        }
+
+        .about-signoff-role {
+          color: #d4af37;
+          font-size: 0.75rem;
+          font-weight: 600;
+          letter-spacing: 0.04em;
+        }
+
+        .about-media-wrap {
+          position: relative;
+          order: 1;
+          display: flex;
+          justify-content: center;
+        }
+
+        .about-media-shell {
+          position: relative;
+          width: 100%;
+          max-width: 31.25rem;
+        }
+
+        .about-media {
+          position: relative;
+          aspect-ratio: 3 / 4;
+          overflow: hidden;
+          border-radius: 2rem;
+          border: 4px solid rgba(212, 175, 55, 0.1);
+          box-shadow: 0 30px 70px rgba(6, 78, 59, 0.16);
+        }
+
+        .about-media img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .about-media:hover img {
+          transform: scale(1.04);
+        }
+
+        .about-media-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(180deg, rgba(6, 78, 59, 0.04), rgba(6, 78, 59, 0.38));
+        }
+
+        .about-badge {
+          position: absolute;
+          left: -2rem;
+          bottom: 3rem;
+          z-index: 2;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 2rem 2.25rem;
+          border-radius: 1.5rem;
+          background: #04241b;
+          border: 1px solid rgba(255, 255, 255, 0.05);
+          box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+        }
+
+        .about-badge-value {
+          display: flex;
+          align-items: baseline;
+          gap: 0.1rem;
+          margin-bottom: 0.45rem;
+        }
+
+        .about-badge-value-main,
+        .about-badge-value-plus {
+          color: #d4af37;
+          font-weight: 700;
+          line-height: 1;
+        }
+
+        .about-badge-value-main {
+          font-size: clamp(2.6rem, 5vw, 3.2rem);
+        }
+
+        .about-badge-value-plus {
+          font-size: clamp(1.2rem, 2vw, 1.65rem);
+        }
+
+        .about-badge-label {
+          color: rgba(255, 255, 255, 0.5);
+          font-size: 0.65rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.3em;
+          white-space: nowrap;
+        }
+
+        .about-orb-top,
+        .about-orb-bottom {
+          position: absolute;
+          pointer-events: none;
+          border-radius: 999px;
+        }
+
+        .about-orb-top {
+          top: -3rem;
+          right: -3rem;
+          width: 12rem;
+          height: 12rem;
+          background: rgba(212, 175, 55, 0.1);
+          filter: blur(80px);
+        }
+
+        .about-orb-bottom {
+          bottom: -3rem;
+          left: 0;
+          width: 8rem;
+          height: 8rem;
+          background: rgba(6, 78, 59, 0.1);
+          filter: blur(60px);
+        }
+
+        @media (min-width: 768px) {
+          .about-root {
+            padding: 5rem 0;
+          }
+
+          .about-shell {
+            padding: 0 2.5rem;
+          }
+        }
+
+        @media (min-width: 1024px) {
+          .about-shell {
+            flex-direction: row;
+            align-items: center;
+            gap: 6rem;
+          }
+
+          .about-copy,
+          .about-media-wrap {
+            width: 50%;
+          }
+
+          .about-copy {
+            order: 1;
+          }
+
+          .about-media-wrap {
+            order: 2;
+            justify-content: flex-end;
+          }
+        }
+
+        @media (min-width: 1280px) {
+          .about-root {
+            padding: 6rem 0;
+          }
+
+          .about-shell {
+            padding: 0 5rem;
+          }
+        }
+
+        @media (max-width: 767px) {
+          .about-kicker {
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+          }
+
+          .about-kicker-text {
+            font-size: 0.66rem;
+            letter-spacing: 0.22em;
+          }
+
+          .about-title {
+            margin-bottom: 1.5rem;
+            font-size: clamp(2rem, 10vw, 3.35rem);
+          }
+
+          .about-signoff {
+            margin-top: 2.25rem;
+            gap: 1rem;
+          }
+
+          .about-monogram {
+            width: 3.5rem;
+            height: 3.5rem;
+            font-size: 1.6rem;
+          }
+
+          .about-badge {
+            left: 1rem;
+            bottom: 1rem;
+            padding: 1.35rem 1.5rem;
+          }
+
+          .about-badge-label {
+            white-space: normal;
+            text-align: center;
+          }
+        }
+      `}</style>
+
+      <section id="brand" ref={containerRef} className="about-root">
+        <div className="about-shell">
+          <div className="about-copy">
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: -30 }}
               animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: 0.5, duration: 0.8 }}
-              className="absolute -left-8 md:-left-12 bottom-12 bg-[#04241b] text-white p-8 md:p-10 rounded-[24px] shadow-2xl border border-white/5 z-20 flex flex-col items-center"
+              transition={{ duration: 0.8 }}
+              className="about-kicker"
             >
-              <div className="flex items-baseline gap-1">
-                <span className="text-4xl md:text-5xl font-bold text-gold">18</span>
-                <span className="text-xl md:text-2xl font-bold text-gold">+</span>
-              </div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/50 whitespace-nowrap">Years of Excellence</span>
+              <span className="about-kicker-line" />
+              <span className="about-kicker-text">The Brand Story</span>
             </motion.div>
-          </motion.div>
 
-          {/* Decorative Elements */}
-          <div className="absolute -top-12 -right-12 w-48 h-48 bg-gold/10 rounded-full blur-[80px]" />
-          <div className="absolute -bottom-12 left-0 w-32 h-32 bg-emerald/10 rounded-full blur-[60px]" />
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.2, duration: 0.8 }}
+              className="about-title"
+            >
+              Building <br />
+              <span className="about-title-accent">Generational Wealth</span>
+            </motion.h2>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.4, duration: 1 }}
+              className="about-body"
+            >
+              <p>
+                Founded in 2007, Rastogi Properties emerged with a singular vision: to bring
+                unprecedented transparency, elegance, and return on investment to the Greater Noida
+                real estate market.
+              </p>
+              <p>
+                We recognize that fine real estate is not merely a transaction; it is a vital
+                cornerstone of your portfolio and a sanctuary for your family. Our team of elite
+                negotiators and market analysts specialize strictly in Grade-A developments across
+                Noida Expressway and the upcoming Jewar Airport region.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.6, duration: 0.6 }}
+              className="about-signoff"
+            >
+              <div className="about-monogram">R</div>
+              <div>
+                <p className="about-signoff-name">S.K. Rastogi</p>
+                <p className="about-signoff-role">Founder & Managing Director</p>
+              </div>
+            </motion.div>
+          </div>
+
+          <div className="about-media-wrap">
+            <motion.div
+              style={{ y: yImage }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={inView ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 1 }}
+              className="about-media-shell"
+            >
+              <div className="about-media">
+                <img
+                  src="https://images.unsplash.com/photo-1577412647305-991150c7d163?auto=format&fit=crop&w=1000&q=80"
+                  alt="Elite Real Estate Advisory"
+                />
+                <div className="about-media-overlay" />
+              </div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: 0.5, duration: 0.8 }}
+                className="about-badge"
+              >
+                <div className="about-badge-value">
+                  <span className="about-badge-value-main">18</span>
+                  <span className="about-badge-value-plus">+</span>
+                </div>
+                <span className="about-badge-label">Years of Excellence</span>
+              </motion.div>
+            </motion.div>
+
+            <div className="about-orb-top" />
+            <div className="about-orb-bottom" />
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
