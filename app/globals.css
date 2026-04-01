@@ -28,6 +28,10 @@
 
   /* Container Padding */
   --container-px: 1.25rem;
+
+  /* Offline-safe font tokens */
+  --font-inter: "Segoe UI";
+  --font-playfair: Georgia;
 }
 
 @media (min-width: 768px) {

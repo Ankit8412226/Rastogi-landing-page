@@ -1,8 +1,5 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import PremiumRouteShell from "../components/PremiumRouteShell";
 import SiteScaffold from "../components/SiteScaffold";
 import { properties } from "../lib/site-data";
@@ -12,10 +9,10 @@ const formatCategory = (value) => {
   return value.charAt(0).toUpperCase() + value.slice(1);
 };
 
-export default function PropertiesPage() {
-  const searchParams = useSearchParams();
-  const query = (searchParams.get("query") || "").trim().toLowerCase();
-  const category = (searchParams.get("category") || "").trim().toLowerCase();
+export default async function PropertiesPage({ searchParams }) {
+  const params = await searchParams;
+  const query = (params?.query || "").trim().toLowerCase();
+  const category = (params?.category || "").trim().toLowerCase();
 
   const filtered = properties.filter((property) => {
     const matchesCategory = !category || property.category === category;
