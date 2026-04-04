@@ -2,12 +2,28 @@
 
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
-import { useRef } from "react";
-import { areas } from "../lib/site-data";
+import { useRef, useState, useEffect } from "react";
+import { areas as fallbackAreas } from "../lib/site-data";
 
 export default function Areas() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const [areasList, setAreasList] = useState(fallbackAreas);
+
+  useEffect(() => {
+    const loadAreas = async () => {
+      try {
+        const res = await fetch("/api/areas");
+        const data = await res.json();
+        if (data.success && data.areas?.length > 0) {
+          setAreasList(data.areas);
+        }
+      } catch (err) {
+        console.error("Failed to fetch areas.");
+      }
+    };
+    loadAreas();
+  }, []);
 
   return (
     <>
@@ -363,7 +379,7 @@ export default function Areas() {
           </div>
 
           <div className="areas-grid">
-            {areas.map((area, idx) => (
+            {areasList.map((area, idx) => (
               <motion.div
                 key={area.slug}
                 initial={{ opacity: 0, y: 40 }}

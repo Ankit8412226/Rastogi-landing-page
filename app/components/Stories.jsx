@@ -2,12 +2,28 @@
 
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
-import { useRef } from "react";
-import { stories } from "../lib/site-data";
+import { useRef, useState, useEffect } from "react";
+import { stories as fallbackStories } from "../lib/site-data";
 
 export default function Stories() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const [storiesList, setStoriesList] = useState(fallbackStories);
+
+  useEffect(() => {
+    const loadStories = async () => {
+      try {
+        const res = await fetch("/api/stories");
+        const data = await res.json();
+        if (data.success && data.stories?.length > 0) {
+          setStoriesList(data.stories);
+        }
+      } catch (err) {
+        console.error("Failed to fetch stories.");
+      }
+    };
+    loadStories();
+  }, []);
 
   return (
     <>
@@ -341,7 +357,7 @@ export default function Stories() {
           </div>
 
           <div className="stories-grid">
-            {stories.map((story, i) => (
+            {storiesList.map((story, i) => (
               <motion.div
                 key={story.slug}
                 initial={{ opacity: 0, y: 30 }}

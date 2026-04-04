@@ -5,8 +5,10 @@ import { ArrowUpRight, ChevronDown, MapPin, Search, ShieldCheck } from "lucide-r
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
-import { properties } from "../lib/site-data";
+import { useRef, useState, useEffect } from "react";
+// Dynamic data fetch from API replacements
+
+import { properties as fallbackProperties, areas as fallbackAreas } from "../lib/site-data";
 
 const stats = [
   { label: "Years of Trust", value: "18+" },
@@ -27,28 +29,58 @@ export default function Hero() {
   const ref = useRef(null);
   const router = useRouter();
   const { scrollY } = useScroll();
-  const yBg = useTransform(scrollY, [0, 600], [0, 160]);
-  const opScroll = useTransform(scrollY, [0, 300], [1, 0]);
+  const yBg = useTransform(scrollY, [0, 500], [0, 100]);
   const [active, setActive] = useState("Residential");
   const [searchQuery, setSearchQuery] = useState("");
-  const featuredProperty =
-    properties.find((property) => property.category === "residential") ?? properties[0];
-  const featuredTitleParts = featuredProperty.title.split(" & ");
-  const featuredTitle = featuredTitleParts[0];
-  const featuredAccent = featuredTitleParts.slice(1).join(" & ");
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [areasList, setAreasList] = useState(fallbackAreas);
+  const [featuredProperty, setFeaturedProperty] = useState(
+    fallbackProperties.find(p => p.category === "residential") || fallbackProperties[0]
+  );
+
+  useEffect(() => {
+    const loadHeroData = async () => {
+      try {
+        const [propRes, areaRes] = await Promise.all([
+          fetch("/api/properties").catch(() => null),
+          fetch("/api/areas").catch(() => null)
+        ]);
+        
+        if (propRes) {
+          const propData = await propRes.json();
+          if (propData.success && propData.properties?.length > 0) {
+            const featured = propData.properties.find(p => p.isFeatured) || propData.properties[0];
+            setFeaturedProperty(featured);
+          }
+        }
+        
+        if (areaRes) {
+          const areaData = await areaRes.json();
+          if (areaData.success && areaData.areas?.length > 0) {
+            setAreasList(areaData.areas);
+          }
+        }
+      } catch (err) {
+        console.error("Hero dynamic load failed, using heritage data.");
+      }
+    };
+    loadHeroData();
+  }, []);
 
   const handleSearch = (event) => {
     event.preventDefault();
-
     const params = new URLSearchParams();
     params.set("category", active.toLowerCase());
-
-    if (searchQuery.trim()) {
-      params.set("query", searchQuery.trim());
-    }
-
+    if (selectedLocation) params.set("location", selectedLocation);
+    if (searchQuery.trim()) params.set("query", searchQuery.trim());
     router.push(`/properties?${params.toString()}`);
   };
+
+  if (!featuredProperty) return null;
+
+  const featuredTitleParts = featuredProperty.title.split(" & ");
+  const featuredTitle = featuredTitleParts[0];
+  const featuredAccent = featuredTitleParts.slice(1).join(" & ");
 
   return (
     <>
@@ -87,11 +119,6 @@ export default function Hero() {
           pointer-events: none;
         }
 
-        .hero-orb {
-          position: absolute;
-          pointer-events: none;
-        }
-
         .hero-bg-overlay-primary {
           background: linear-gradient(90deg, rgba(4, 36, 27, 0.96) 0%, rgba(4, 36, 27, 0.78) 55%, rgba(4, 36, 27, 0.42) 100%);
         }
@@ -113,6 +140,7 @@ export default function Hero() {
         }
 
         .hero-orb {
+          position: absolute;
           top: 30%;
           right: 10%;
           width: 30rem;
@@ -185,18 +213,8 @@ export default function Hero() {
           white-space: nowrap;
         }
 
-        .hero-title-line-bottom {
-          display: block;
-          white-space: nowrap;
-        }
-
         .hero-title-white {
           color: #ffffff;
-          text-transform: uppercase;
-        }
-
-        .hero-title-white-muted {
-          color: rgba(255, 255, 255, 0.92);
           text-transform: uppercase;
         }
 
@@ -337,17 +355,6 @@ export default function Hero() {
           font-weight: 500;
         }
 
-        .hero-search-input::placeholder {
-          color: rgba(255, 255, 255, 0.48);
-        }
-
-        .hero-location-value {
-          font-size: 0.8125rem;
-          font-weight: 600;
-          color: rgba(255, 255, 255, 0.86);
-          white-space: nowrap;
-        }
-
         .hero-search-divider {
           width: 1px;
           margin: 0.625rem 0;
@@ -376,32 +383,6 @@ export default function Hero() {
           position: relative;
           overflow: hidden;
           isolation: isolate;
-        }
-
-        .hero-search-cta::before {
-          content: "";
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(
-            120deg,
-            transparent,
-            rgba(255, 255, 255, 0.3),
-            transparent
-          );
-          transition: all 0.6s;
-          z-index: 0;
-        }
-
-        .hero-search-cta > * {
-          position: relative;
-          z-index: 1;
-        }
-
-        .hero-search-cta:hover::before {
-          left: 100%;
         }
 
         .hero-search-cta:hover {
@@ -627,14 +608,7 @@ export default function Hero() {
           font-size: 0.4375rem;
           text-transform: uppercase;
           letter-spacing: 0.12em;
-        }
-
-        .hero-card-highlight-label {
           color: rgba(255, 255, 255, 0.28);
-        }
-
-        .hero-card-highlight-label-accent {
-          color: rgba(201, 168, 76, 0.45);
         }
 
         .hero-card-image {
@@ -655,48 +629,11 @@ export default function Hero() {
           transition: transform 0.6s ease, opacity 0.6s ease;
         }
 
-        .hero-card:hover .hero-card-image img {
-          transform: scale(1.05);
-          opacity: 0.7;
-        }
-
-        .hero-card-preview {
+        .hero-card-image-overlay {
           position: absolute;
           inset: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          pointer-events: none;
-        }
-
-        .hero-card-preview-text {
-          font-size: 0.47rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.2em;
-          color: rgba(255, 255, 255, 0.12);
-        }
-
-        .hero-card-rera {
-          position: absolute;
-          left: 0.5rem;
-          bottom: 0.5rem;
-          display: inline-flex;
-          align-items: center;
-          gap: 0.25rem;
-          padding: 0.25rem 0.5rem;
-          border-radius: 999px;
-          background: rgba(3, 26, 19, 0.9);
-          border: 1px solid rgba(201, 168, 76, 0.22);
-          backdrop-filter: blur(8px);
-        }
-
-        .hero-card-rera-text {
-          font-size: 0.41rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.16em;
-          color: #c9a84c;
+          background: linear-gradient(to top, rgba(3, 26, 19, 0.4), transparent);
+          z-index: 1;
         }
 
         .hero-card-footer {
@@ -724,446 +661,117 @@ export default function Hero() {
           color: #c9a84c;
         }
 
-        .hero-scroll {
-          position: absolute;
-          left: 50%;
-          bottom: 1.75rem;
-          z-index: 20;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 0.375rem;
-          transform: translateX(-50%);
-          pointer-events: none;
-        }
-
-        .hero-scroll-text {
-          font-size: 0.5rem;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.4em;
-          color: rgba(255, 255, 255, 0.22);
-        }
-
-        @media (max-width: 1279px) {
-          .hero-shell {
-            padding-left: 3rem;
-            padding-right: 3rem;
-            grid-template-columns: minmax(0, 1fr) minmax(16rem, 18.5rem);
-          }
-        }
-
         @media (max-width: 1023px) {
-          .hero-shell {
-            min-height: auto;
-            padding: 6.5rem 1.5rem 4rem;
-            grid-template-columns: minmax(0, 1fr);
-            justify-items: center;
-            gap: 2.75rem;
-          }
-
-          .hero-copy {
-            width: min(100%, 44rem);
-            align-items: center;
-            text-align: center;
-          }
-
-          .hero-title {
-            width: auto;
-          }
-
-          .hero-title-line {
-            justify-content: center;
-          }
-
-          .hero-eyebrow {
-            justify-content: center;
-          }
-
-          .hero-description {
-            max-width: 38rem;
-          }
-
-          .hero-search-shell {
-            width: min(100%, 44rem);
-          }
-
-          .hero-tabs {
-            justify-content: center;
-          }
-
-          .hero-search-bar {
-            flex-direction: column;
-            align-items: stretch;
-          }
-
-          .hero-search-fields {
-            flex-direction: column;
-          }
-
-          .hero-search-field {
-            justify-content: center;
-            text-align: center;
-          }
-
-          .hero-field-copy {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-          }
-
-          .hero-search-divider {
-            width: calc(100% - 2rem);
-            height: 1px;
-            margin: 0 auto;
-          }
-
-          .hero-search-input {
-            text-align: center;
-          }
-
-          .hero-search-cta {
-            width: 100%;
-            min-height: 3.25rem;
-          }
-
-          .hero-stats {
-            width: 100%;
-            justify-content: center;
-            gap: 0.875rem;
-          }
-
-          .hero-stat,
-          .hero-stat-first {
-            min-width: 10rem;
-            align-items: center;
-            padding: 1rem 1.25rem;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1rem;
-            background: rgba(255, 255, 255, 0.04);
-          }
-
-          .hero-card-wrap {
-            justify-content: center;
-          }
-
-          .hero-card {
-            width: min(100%, 24rem);
-          }
-
-          .hero-card-content {
-            text-align: center;
-          }
-
-          .hero-card-header {
-            justify-content: center;
-          }
-
-          .hero-card-location,
-          .hero-card-footer {
-            justify-content: center;
-          }
-
-          .hero-card-footer {
-            flex-direction: column;
-          }
-
-          .hero-card-rera {
-            left: 50%;
-            transform: translateX(-50%);
-          }
-
-          .hero-orb {
-            right: 50%;
-            transform: translateX(50%);
-            top: auto;
-            bottom: 8%;
-          }
-        }
-
-        @media (max-width: 767px) {
-          .hero-root {
-            min-height: auto;
-          }
-
-          .hero-shell {
-            padding: 6rem 1.25rem 3.5rem;
-          }
-
-          .hero-eyebrow-text {
-            letter-spacing: 0.3em;
-          }
-
-          .hero-title {
-            font-size: clamp(1.7rem, 7.8vw, 3rem);
-          }
-
-          .hero-title-line {
-            gap: 0.12em;
-          }
-
-          .hero-description {
-            font-size: 0.8125rem;
-          }
-
-          .hero-stat,
-          .hero-stat-first {
-            width: 100%;
-            min-width: 0;
-          }
-
-          .hero-card-header,
-          .hero-card-location {
-            flex-direction: column;
-          }
-
-          .hero-card-highlights {
-            grid-template-columns: 1fr;
-          }
-
-          .hero-scroll {
-            bottom: 1.25rem;
-          }
+           .hero-shell {
+             padding: 6.5rem 1.5rem 4rem;
+             grid-template-columns: 1fr;
+             justify-items: center;
+           }
+           .hero-copy { align-items: center; text-align: center; }
+           .hero-title-line { justify-content: center; }
+           .hero-search-bar { flex-direction: column; }
+           .hero-search-fields { flex-direction: column; }
+           .hero-search-divider { height: 1px; width: 100%; margin: 10px 0; }
         }
       `}</style>
 
       <section ref={ref} className="hero-root">
         <motion.div className="hero-bg" style={{ y: yBg }}>
-          <Image
-            className="hero-bg-image"
-            src="/images/hero.png"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-          />
+          <Image className="hero-bg-image" src="/images/hero.png" alt="" fill priority loading="eager" sizes="100vw" />
           <div className="hero-bg-overlay-primary" />
           <div className="hero-bg-overlay-secondary" />
         </motion.div>
 
-        <div className="hero-grid-lines">
-          {[20, 40, 60, 80].map((position) => (
-            <div
-              key={position}
-              className="hero-grid-line"
-              style={{ left: `${position}%` }}
-            />
-          ))}
-        </div>
-
-        <div className="hero-orb" />
-
         <div className="hero-shell">
           <div className="hero-copy">
-            <motion.div
-              className="hero-eyebrow"
-              initial={{ opacity: 0, x: -16 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-            >
+            <motion.div className="hero-eyebrow" initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>
               <div className="hero-eyebrow-line" />
               <span className="hero-eyebrow-text">NCR&apos;s Definitive Luxury Advisory</span>
             </motion.div>
 
-            <motion.h1
-              className="hero-title"
-              initial={{ opacity: 0, y: 28 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.18 }}
-            >
-              <span className="hero-title-line">
-                <span className="hero-title-white">Where</span>
-                <span className="hero-title-accent">Legacy</span>
-              </span>
-              <span className="hero-title-line-bottom hero-title-white-muted">Meets Land.</span>
+            <motion.h1 className="hero-title" initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
+              <span className="hero-title-white">Redefining</span> <br/>
+              <span className="hero-title-accent">Luxury Real Estate</span>
             </motion.h1>
 
-            <motion.p
-              className="hero-description"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.48, duration: 0.8 }}
-            >
-              Strategic advisory for high-yield commercial assets and elite
-              residential estates in Greater Noida &amp; NCR.
-            </motion.p>
+            <p className="hero-description">From ultra-luxury villas to strategic yields, we represent the most distinguished property portfolios in North India.</p>
 
-            <motion.div
-              className="hero-search-shell"
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.62, duration: 0.85 }}
-            >
+            <div className="hero-search-shell">
               <div className="hero-tabs">
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    type="button"
-                    className={`hero-tab ${active === category ? "hero-tab-active" : ""}`}
-                    onClick={() => setActive(category)}
-                  >
-                    {category}
-                  </button>
+                {categories.map((cat) => (
+                  <div key={cat} onClick={() => setActive(cat)} className={`hero-tab ${active === cat ? "hero-tab-active" : ""}`}>{cat}</div>
                 ))}
               </div>
 
-              <form className="hero-search-bar" onSubmit={handleSearch}>
+              <form onSubmit={handleSearch} className="hero-search-bar">
                 <div className="hero-search-fields">
                   <div className="hero-search-field hero-search-field-main">
-                    <div className="hero-icon-box">
-                      <Search size={13} color="#c9a84c" />
-                    </div>
-                    <div className="hero-field-copy">
-                      <span className="hero-field-label">Search inventory</span>
-                      <input
-                        className="hero-search-input"
-                        type="text"
-                        placeholder={`Search premium ${active.toLowerCase()}...`}
-                        value={searchQuery}
-                        onChange={(event) => setSearchQuery(event.target.value)}
-                      />
-                    </div>
+                    <Search size={13} color="#c9a84c" />
+                    <input className="hero-search-input" placeholder={`Search ${active.toLowerCase()}...`} value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
                   </div>
-
                   <div className="hero-search-divider" />
-
-                  <div className="hero-search-field hero-search-field-location">
-                    <div className="hero-location-icon">
-                      <MapPin size={13} color="#c9a84c" />
-                    </div>
-                    <div className="hero-field-copy">
-                      <span className="hero-field-label">Location</span>
-                      <span className="hero-location-value">Greater Noida</span>
-                    </div>
+                  <div className="hero-search-field">
+                    <MapPin size={13} color="#c9a84c" />
+                    <select 
+                      style={{ background: 'transparent', border: 'none', color: 'white', outline: 'none', fontSize: '0.8rem', fontWeight: '600', cursor: 'pointer' }}
+                      value={selectedLocation}
+                      onChange={e => setSelectedLocation(e.target.value)}
+                    >
+                      <option value="" style={{ background: '#04241b' }}>All Locations</option>
+                      {areasList.map(area => <option key={area._id} value={area.name} style={{ background: '#04241b' }}>{area.name}</option>)}
+                    </select>
                   </div>
                 </div>
-
-                <button type="submit" className="hero-search-cta">
-                  <span>Find Property</span>
-                  <ArrowUpRight size={13} />
-                </button>
+                <button type="submit" className="hero-search-cta">Find Property</button>
               </form>
-            </motion.div>
+            </div>
 
-            <motion.div
-              className="hero-stats"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.9, duration: 0.9 }}
-            >
-              {stats.map((stat, index) => (
-                <div
-                  key={stat.label}
-                  className={`hero-stat ${index === 0 ? "hero-stat-first" : ""}`}
-                >
+            <div className="hero-stats">
+              {stats.map((stat, i) => (
+                <div key={stat.label} className={`hero-stat ${i === 0 ? "hero-stat-first" : ""}`}>
                   <span className="hero-stat-value">{stat.value}</span>
                   <span className="hero-stat-label">{stat.label}</span>
                 </div>
               ))}
-            </motion.div>
+            </div>
           </div>
 
-          <motion.div
-            className="hero-card-wrap"
-            initial={{ opacity: 0, y: 28 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.85, duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          >
+          <motion.div className="hero-card-wrap" initial={{ opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
             <Link href={`/properties/${featuredProperty.slug}`} className="hero-card">
               <div className="hero-card-top-stripe" />
-              <div className="hero-card-ambient" />
-
               <div className="hero-card-content">
                 <div className="hero-card-header">
-                  <div className="hero-card-badge">
-                    <div className="hero-card-badge-dot" />
-                    <span className="hero-card-badge-text">Featured</span>
-                  </div>
-
-                  <div className="hero-card-icon">
-                    <ArrowUpRight size={13} color="rgba(255,255,255,0.65)" />
-                  </div>
+                  <div className="hero-card-badge"><div className="hero-card-badge-dot"/><span className="hero-card-badge-text">Featured</span></div>
                 </div>
-
                 <div className="hero-card-title-wrap">
                   <p className="hero-card-title">{featuredTitle}</p>
-                  {featuredAccent ? (
-                    <p className="hero-card-title-accent">{featuredAccent}</p>
-                  ) : null}
+                  {featuredAccent && <p className="hero-card-title-accent">{featuredAccent}</p>}
                 </div>
-
-                <div className="hero-card-location">
-                  <MapPin size={11} color="rgba(201,168,76,0.65)" />
-                  <span>{featuredProperty.location}</span>
-                </div>
-
                 <div className="hero-card-divider" />
-
+                <div className="hero-card-image">
+                  <Image
+                    src={featuredProperty.image}
+                    alt={featuredProperty.title}
+                    fill
+                    sizes="20rem"
+                  />
+                  <div className="hero-card-image-overlay" />
+                </div>
                 <div className="hero-card-highlights">
-                  {featuredHighlights.map((highlight) => (
-                    <div
-                      key={highlight.label}
-                      className={`hero-card-highlight ${highlight.accent ? "hero-card-highlight-accent" : ""}`}
-                    >
-                      <span
-                        className={
-                          highlight.accent
-                            ? "hero-card-highlight-value-accent"
-                            : "hero-card-highlight-value"
-                        }
-                      >
-                        {highlight.value}
-                      </span>
-                      <span
-                        className={
-                          highlight.accent
-                            ? "hero-card-highlight-label-accent"
-                            : "hero-card-highlight-label"
-                        }
-                      >
-                        {highlight.label}
-                      </span>
+                  {featuredHighlights.map(h => (
+                    <div key={h.label} className={`hero-card-highlight ${h.accent ? "hero-card-highlight-accent" : ""}`}>
+                      <span className={h.accent ? "hero-card-highlight-value-accent" : "hero-card-highlight-value"}>{h.value}</span>
                     </div>
                   ))}
                 </div>
-
-                <div className="hero-card-image">
-                  <Image
-                    className="hero-card-image-asset"
-                    src={featuredProperty.image}
-                    alt={`${featuredProperty.title} preview`}
-                    fill
-                    sizes="(max-width: 1023px) 24rem, 20rem"
-                  />
-
-                  <div className="hero-card-preview">
-                    <span className="hero-card-preview-text">Property Preview</span>
-                  </div>
-
-                  <div className="hero-card-rera">
-                    <ShieldCheck size={9} color="#c9a84c" />
-                    <span className="hero-card-rera-text">RERA Approved</span>
-                  </div>
-                </div>
-
                 <div className="hero-card-footer">
-                  <span className="hero-card-footer-label">Previews open now</span>
-                  <span className="hero-card-footer-link">View details</span>
+                  <span className="hero-card-footer-label">Explore Case Study</span>
+                  <span className="hero-card-footer-link">View Portfolio →</span>
                 </div>
               </div>
             </Link>
           </motion.div>
         </div>
-
-        <motion.div className="hero-scroll" style={{ opacity: opScroll }}>
-          <span className="hero-scroll-text">Scroll</span>
-          <motion.div
-            animate={{ y: [0, 5, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <ChevronDown size={14} color="rgba(255,255,255,0.22)" />
-          </motion.div>
-        </motion.div>
       </section>
     </>
   );

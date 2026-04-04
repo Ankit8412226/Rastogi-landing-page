@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "slug": "yamuna-expressway-plots",
+    "title": "Yamuna Expressway Plots",
+    "location": "Sector 18, 20 & 22",
+    "tag": "Investment High-Yield",
+    "category": "plots",
+    "price": "INR 2.45 Cr onwards",
+    "image": "/images/property_1.png",
+    "note": "Fast-moving corridor",
+    "detailA": "Premium Land Bank",
+    "detailB": "Long-term Growth",
+    "summary": "Strategic plotted inventory near aviation, industrial, and logistics growth corridors around Jewar and the Yamuna belt.",
+    "highlights": [
+      "Close to Jewar Airport influence zone",
+      "Strong land banking potential",
+      "Emerging institutional and infrastructure demand"
+    ],
+    "ctaLabel": "Book Private Tour"
+  },
+  {
+    "id": 2,
+    "slug": "luxury-villas-floors",
+    "title": "Luxury Villas & Floors",
+    "location": "Noida Expressway, Sector 150",
+    "tag": "Residential",
+    "category": "residential",
+    "price": "INR 3.80 Cr onwards",
+    "image": "/images/property_2.png",
+    "note": "Private estate living",
+    "detailA": "Resort-style Access",
+    "detailB": "Low Density",
+    "summary": "Ultra-premium villa and low-rise inventory in one of NCR's most curated residential micro-markets.",
+    "highlights": [
+      "Low-density gated living",
+      "Club, wellness, and landscaped luxury",
+      "Preferred by HNI end-users and investors"
+    ],
+    "ctaLabel": "Schedule Site Visit"
+  },
+  {
+    "id": 3,
+    "slug": "high-end-office-spaces",
+    "title": "High-End Office Spaces",
+    "location": "Advant Navis, Greater Noida West",
+    "tag": "Commercial",
+    "category": "commercial",
+    "price": "INR 1.20 Cr onwards",
+    "image": "/images/property_3.png",
+    "note": "Institutional-grade asset",
+    "detailA": "Yield Focused",
+    "detailB": "Business District",
+    "summary": "Grade-A office inventory for investors seeking rental yield, tenant-ready assets, and business district positioning.",
+    "highlights": [
+      "Managed commercial inventory",
+      "Strong leasing profile",
+      "Ideal for yield and capital preservation"
+    ],
+    "ctaLabel": "View Commercial Details"
+  }
+]

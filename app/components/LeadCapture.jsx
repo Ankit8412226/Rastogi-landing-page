@@ -59,9 +59,24 @@ export default function LeadCapture() {
   };
   const followUpHref = interestHrefMap[activeInterest] ?? "/properties";
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    setSubmitted(true);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, activeInterest }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setSubmitted(true);
+      } else {
+        alert("Submission failed. Please try again or contact us directly.");
+      }
+    } catch (err) {
+      console.error("Submission error:", err);
+      alert("Something went wrong. Let's try again in a moment.");
+    }
   };
 
   return (

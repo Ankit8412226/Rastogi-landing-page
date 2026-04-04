@@ -4,12 +4,28 @@ import { motion, useInView } from "framer-motion";
 import { ArrowUpRight, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRef } from "react";
-import { properties } from "../lib/site-data";
+import { useEffect, useRef, useState } from "react";
+import { properties as fallbackProperties } from "../lib/site-data";
 
 export default function Properties() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const [propertiesList, setPropertiesList] = useState(fallbackProperties);
+
+  useEffect(() => {
+    const loadProperties = async () => {
+      try {
+        const res = await fetch("/api/properties");
+        const data = await res.json();
+        if (data.success && data.properties?.length > 0) {
+          setPropertiesList(data.properties);
+        }
+      } catch (err) {
+        console.error("Failed to fetch properties, using fallback data.");
+      }
+    };
+    loadProperties();
+  }, []);
 
   return (
     <>
@@ -562,7 +578,7 @@ export default function Properties() {
           </div>
 
           <div className="properties-grid">
-            {properties.map((property, idx) => (
+            {propertiesList.map((property, idx) => (
               <motion.article
                 key={property.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -609,10 +625,12 @@ export default function Properties() {
                       <div className="property-price">{property.price}</div>
                     </div>
 
-                    <div className="property-featured">
-                      <span className="property-featured-dot" />
-                      Featured
-                    </div>
+                    {property.isFeatured && (
+                      <div className="property-featured">
+                        <span className="property-featured-dot" />
+                        Featured
+                      </div>
+                    )}
                   </div>
 
                   <div className="property-stats">
