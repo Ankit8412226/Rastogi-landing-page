@@ -476,15 +476,22 @@ export default function Footer() {
               <h4 className="footer-heading">Headquarters</h4>
               <div className="footer-address">
                 <p className="footer-address-copy">
-                  Rastogi Towers, Floor 14 <br />
-                  Sector 1, Greater Noida <br />
-                  Uttar Pradesh, India 201306
+                  702, Om Tower, Floor 7 <br />
+                  Alpha-1 Commercial Belt, Greater Noida <br />
+                  Uttar Pradesh, India 201310
                 </p>
 
                 <div className="footer-contact">
                   <span className="footer-contact-label">Client Direct</span>
-                  <a href="tel:+919990000000" className="footer-contact-link">
-                    +91-999-000-0000
+                  <a href="tel:+919810354215" className="footer-contact-link">
+                    +91 98103 54215
+                  </a>
+                  <a
+                    href="mailto:rastogipropertiesindia@gmail.com"
+                    className="footer-contact-link"
+                    style={{ fontSize: "0.82rem", opacity: 0.8, marginTop: "4px" }}
+                  >
+                    rastogipropertiesindia@gmail.com
                   </a>
                 </div>
               </div>

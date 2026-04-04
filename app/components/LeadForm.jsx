@@ -6,9 +6,9 @@ import { useRef, useState } from "react";
 import { socialLinks } from "../lib/site-data";
 
 const contactDetails = [
-  { icon: MapPin, label: "Greater Noida & NCR" },
-  { icon: Phone, label: "+91 98765 43210" },
-  { icon: Mail, label: "info@rastogiproperties.in" },
+  { icon: MapPin, label: "702, Om Tower, Alpha-1, Greater Noida" },
+  { icon: Phone, label: "+91 98103 54215" },
+  { icon: Mail, label: "rastogipropertiesindia@gmail.com" },
   { icon: Clock, label: "Mon-Sat, 9AM-7PM" },
 ];
 
@@ -715,7 +715,7 @@ export default function LeadForm() {
                       <input
                         type="tel"
                         required
-                        placeholder="+91 98765 43210"
+                        placeholder="+91 98103 54215"
                         value={form.phone}
                         onChange={(event) => setForm({ ...form, phone: event.target.value })}
                         className="leadform-input"
