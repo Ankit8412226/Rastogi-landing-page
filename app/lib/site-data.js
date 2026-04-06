@@ -2,7 +2,7 @@ export const socialLinks = {
   instagram: "https://www.instagram.com/",
   linkedin: "https://www.linkedin.com/",
   facebook: "https://www.facebook.com/",
-  whatsapp: "https://wa.me/919990000000",
+  whatsapp: "https://wa.me/919810354215",
 };
 
 export const properties = [

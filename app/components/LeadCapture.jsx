@@ -13,8 +13,8 @@ const interests = [
 ];
 
 const contactItems = [
-  { icon: "📞", tag: "Direct Advisory", value: "+91 999 000 0000" },
-  { icon: "✉️", tag: "Electronic Mail", value: "private@rastogi.luxury" },
+  { icon: "📞", tag: "Direct Advisory", value: "+91 98103 54215" },
+  { icon: "✉️", tag: "Electronic Mail", value: "rastogipropertiesindia@gmail.com" },
 ];
 
 const buttonStyles = `
